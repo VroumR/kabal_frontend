@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Kabal – Trouve ta Sephira</title>
+  <style>
+    body {
+      background-color: #fff7e6;
+      font-family: 'Georgia', serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .box {
+      background: #fffdf7;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 0 12px rgba(0, 0, 0, 0.08);
+      text-align: center;
+      width: 90%;
+      max-width: 360px;
+    }
+    h2 {
+      color: #4b2e1e;
+      margin-bottom: 1em;
+    }
+    label {
+      display: block;
+      margin: 12px 0 6px;
+      color: #5b3925;
+      font-weight: bold;
+    }
+    input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid #cbb091;
+      border-radius: 6px;
+    }
+    button {
+      margin-top: 20px;
+      background-color: #6d4c3d;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #5a3d31;
+    }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h2>Test Kabal – Trouve ta Sephira</h2>
+    <form method="POST" action="https://kabal-blackend.onrender.com/">
+      <label for="birth_date">Date de naissance (YYYY-MM-DD) :</label<label for="birth_time">Heure de naissance (HH:MM, 24h) :</label>
+      <input type="text" name="birth_time" placeholder="Ex : 19:30" required />
+
+      <button type="submit">Envoyer</button>
+    </form>
+  </div>
+</body>
+</html>
