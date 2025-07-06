@@ -3,53 +3,43 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>KABAL - Découvre ta Sephira</title>
+  <title>KABAL - Test Sephira</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
   <style>
     body {
-      background-color: #0a0a0a;
+      background-color: #0d0d0d;
       color: white;
-      font-family: 'Georgia', serif;
+      font-family: 'Playfair Display', serif;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       min-height: 100vh;
-      padding: 20px;
+      margin: 0;
       text-align: center;
     }
-
     h1 {
       font-size: 2em;
-      margin-bottom: 20px;
+      margin-bottom: 0.5em;
     }
-
-    input, button {
-      margin: 10px 0;
-      padding: 10px;
+    label, select, button {
+      margin: 0.5em;
       font-size: 1em;
+    }
+    select, button {
+      padding: 0.5em;
       border-radius: 5px;
       border: none;
     }
-
-    input {
-      width: 100%;
-      max-width: 300px;
-    }
-
     button {
-      background-color: #d4af37;
+      background-color: goldenrod;
       color: black;
+      font-weight: bold;
       cursor: pointer;
     }
-
-    button:hover {
-      background-color: #b98f2e;
-    }
-
     #result {
-      margin-top: 20px;
+      margin-top: 2em;
       font-size: 1.2em;
-      font-weight: bold;
     }
   </style>
 </head>
@@ -57,8 +47,12 @@
   <h1>Bienvenue sur KABAL</h1>
   <p>Entrez votre date et heure de naissance</p>
   
-  <input type="date" id="birthDate" />
-  <input type="time" id="birthTime" />
+  <label for="date">Date :</label>
+  <input type="date" id="date" />
+  
+  <label for="heure">Heure :</label>
+  <input type="time" id="heure" />
+
   <br />
   <button onclick="getSephira()">Découvrir ma Sephira</button>
 
@@ -66,24 +60,24 @@
 
   <script>
     async function getSephira() {
-      const date = document.getElementById("birthDate").value;
-      const time = document.getElementById("birthTime").value;
-      if (!date || !time) {
-        alert("Veuillez remplir les deux champs.");
+      const date = document.getElementById("date").value;
+      const heure = document.getElementById("heure").value;
+
+      if (!date || !heure) {
+        alert("Veuillez entrer la date et l'heure");
         return;
       }
 
-      const fullDate = `${date}T${time}`;
+      const datetime = date + "T" + heure;
+      const url = `https://kabal-blackend.onrender.com/get_sephira?date=${encodeURIComponent(datetime)}`;
+
       try {
-        const res = await fetch("https://kabal-blackend.onrender.com/sephira", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ date: fullDate })
-        });
-        const data = await res.json();
-        document.getElementById("result").innerText = `Votre Sephira principale est : ${data.result}`;
-      } catch (err) {
-        document.getElementById("result").innerText = "Erreur lors de la requête.";
+        const response = await fetch(url);
+        const data = await response.json();
+        document.getElementById("result").innerText =
+          `Ta Sephira principale est : ${data.sephira_principale}\nSephirot secondaires : ${data.sephirot_secondaires.join(", ")}`;
+      } catch (error) {
+        document.getElementById("result").innerText = "Erreur de requête.";
       }
     }
   </script>
