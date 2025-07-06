@@ -2,72 +2,90 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>KABAL - Découvrez votre Séphira</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KABAL - Découvre ta Sephira</title>
   <style>
     body {
-      background-color: #000;
-      color: #fff;
+      background-color: #0a0a0a;
+      color: white;
       font-family: 'Georgia', serif;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      height: 100vh;
-      margin: 0;
+      min-height: 100vh;
+      padding: 20px;
       text-align: center;
     }
+
     h1 {
-      font-size: 2.5em;
-      margin-bottom: 0.5em;
+      font-size: 2em;
+      margin-bottom: 20px;
     }
-    select, button {
-      padding: 0.6em;
+
+    input, button {
+      margin: 10px 0;
+      padding: 10px;
       font-size: 1em;
-      margin: 0.5em;
       border-radius: 5px;
       border: none;
     }
+
+    input {
+      width: 100%;
+      max-width: 300px;
+    }
+
     button {
       background-color: #d4af37;
-      color: #000;
-      font-weight: bold;
+      color: black;
       cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #b98f2e;
+    }
+
+    #result {
+      margin-top: 20px;
+      font-size: 1.2em;
+      font-weight: bold;
     }
   </style>
 </head>
 <body>
   <h1>Bienvenue sur KABAL</h1>
   <p>Entrez votre date et heure de naissance</p>
+  
+  <input type="date" id="birthDate" />
+  <input type="time" id="birthTime" />
+  <br />
+  <button onclick="getSephira()">Découvrir ma Sephira</button>
 
-  <input type="date" id="dateInput" value="2000-01-01">
-  <input type="time" id="timeInput" value="12:00">
-  <br>
-  <button id="submitBtn">Découvrir ma Sephira</button>
+  <div id="result"></div>
 
   <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      document.getElementById("submitBtn").addEventListener("click", function (e) {
-        e.preventDefault();
+    async function getSephira() {
+      const date = document.getElementById("birthDate").value;
+      const time = document.getElementById("birthTime").value;
+      if (!date || !time) {
+        alert("Veuillez remplir les deux champs.");
+        return;
+      }
 
-        const date = document.getElementById("dateInput").value;
-        const time = document.getElementById("timeInput").value;
-
-        fetch("https://kabal-blackend.onrender.com/sephira", {
+      const fullDate = `${date}T${time}`;
+      try {
+        const res = await fetch("https://kabal-blackend.onrender.com/sephira", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ date: date, time: time })
-        })
-        .then(response => response.json())
-        .then(data => {
-          alert("Ta Sephira principale est : " + data.sephira);
-        })
-        .catch(error => {
-          console.error("Erreur lors de la requête :", error);
-          alert("Erreur lors de la requête.");
+          body: JSON.stringify({ date: fullDate })
         });
-      });
-    });
+        const data = await res.json();
+        document.getElementById("result").innerText = `Votre Sephira principale est : ${data.result}`;
+      } catch (err) {
+        document.getElementById("result").innerText = "Erreur lors de la requête.";
+      }
+    }
   </script>
 </body>
 </html>
