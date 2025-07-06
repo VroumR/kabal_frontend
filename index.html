@@ -3,15 +3,18 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>KABAL - Trouve ta Sephira</title>
+  <title>Kabal Test Sephirot</title>
   <style>
     body {
       margin: 0;
-      font-family: "Georgia", serif;
-      background: url('logo_kabal_background.png') no-repeat center center fixed;
-      background-size: contain;
+      padding: 0;
+      background-image: url('KABAL_logo_relief.png');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
       background-color: #0a0a0a;
       color: #f5f5f5;
+      font-family: 'Georgia', serif;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -19,81 +22,58 @@
       height: 100vh;
       text-align: center;
     }
-    .container {
-      background-color: rgba(0, 0, 0, 0.7);
-      padding: 2em;
-      border-radius: 12px;
-      box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
-      max-width: 400px;
-      width: 90%;
-    }
     input, button {
-      width: 100%;
-      padding: 0.8em;
-      margin: 0.5em 0;
+      margin: 10px;
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 5px;
       border: none;
-      border-radius: 8px;
-      font-size: 1em;
+    }
+    input {
+      width: 200px;
     }
     button {
-      background-color: #c2a55f;
-      color: black;
+      background-color: #d4af37;
+      color: #000;
       cursor: pointer;
-      font-weight: bold;
     }
-    button:hover {
-      background-color: #d6bb6d;
-    }
-    h1 {
-      margin-bottom: 1em;
+    .result {
+      margin-top: 20px;
+      font-size: 20px;
+      background-color: rgba(0, 0, 0, 0.6);
+      padding: 20px;
+      border-radius: 10px;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>KABAL — Trouve ta Sephira</h1>
-    <form id="sephira-form">
-      <label for="date">Date de naissance (YYYY-MM-DD) :</label>
-      <input type="text" id="date" name="date" placeholder="ex: 1997-02-12" required>
-
-      <label for="time">Heure de naissance (HH:MM) :</label>
-      <input type="text" id="time" name="time" placeholder="ex: 14:30" required>
-
-      <button type="submit">Envoyer</button>
-    </form>
-    <p id="result"></p>
-  </div>
+  <h1>Bienvenue sur KABAL</h1>
+  <p>Entrez votre date et heure de naissance</p>
+  <input type="date" id="birthdate" />
+  <input type="time" id="birthtime" />
+  <button onclick="submit()">Découvrir ma Sephira</button>
+  <div class="result" id="result"></div>
 
   <script>
-    document.getElementById("sephira-form").addEventListener("submit", async function (e) {
-      e.preventDefault();
-
-      const date = document.getElementById("date").value;
-      const time = document.getElementById("time").value;
-      const resultEl = document.getElementById("result");
-
-      resultEl.innerText = "Analyse en cours...";
-
-      try {
-        const response = await fetch("https://kabal-blackend.onrender.com/sephira", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({ date, time })
-        });
-
-        const data = await response.json();
-
-        if (data.main_sephira) {
-          resultEl.innerText = `Ta Sephira principale est : ${data.main_sephira}`;
-        } else {
-          resultEl.innerText = "Erreur dans la réponse du serveur.";
-        }
-      } catch (error) {
-        resultEl.innerText = "Erreur de connexion au serveur.";
+    async function submit() {
+      const date = document.getElementById("birthdate").value;
+      const time = document.getElementById("birthtime").value;
+      if (!date || !time) {
+        document.getElementById("result").innerText = "Veuillez remplir les deux champs.";
+        return;
       }
-    });
+
+      const response = await fetch("https://kabal-blackend.onrender.com/get_sephira", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ birth_date: date, birth_time: time })
+      });
+
+      const data = await response.json();
+      document.getElementById("result").innerText = `Votre Sephira principale est : ${data.main_sephira}\nSephirot secondaires : ${data.secondary_sephirot.join(", ")}`;
+    }
   </script>
 </body>
 </html>
