@@ -138,12 +138,28 @@
         const second = data.secondaires?.length ? `<div class="secondaires">Soutiens : ${data.secondaires.join(", ")}</div>` : "";
 
         container.innerHTML = `
-          <div class="card-resultat">
-            <h2>🔮 Ta Séphira dominante : ${data.dominante}</h2>
-            <p>${desc}</p>
-            ${second}
-          </div>
-        `;
+  <div class="card-resultat">
+    <h2>🔮 Ta Séphira dominante : ${data.dominante}</h2>
+    <p>${desc}</p>
+    ${second}
+    <div style="margin-top: 20px;">
+      <a href="${data.dominante.toLowerCase()}.html" style="
+        display: inline-block;
+        margin-top: 10px;
+        background-color: #d4af37;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 6px;
+        text-decoration: none;
+        font-weight: bold;
+        box-shadow: 0 0 8px rgba(212,175,55,0.3);
+      ">
+        👉 En savoir plus
+      </a>
+    </div>
+  </div>
+`;
+
       }
     });
   </script>
