@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>KABAL – Test des Séphirot</title>
-  <link rel="icon" href="/logo-kabal.png">
+  <link rel="icon" href="logo-kabal.png">
   <style>
     body {
       font-family: 'Cormorant Garamond', serif;
@@ -49,22 +49,34 @@
     button:hover {
       background-color: #bfa337;
     }
-    pre {
-      text-align: left;
+    .card-resultat {
+      border: 2px solid #d4af37;
       background-color: #fffdf5;
-      padding: 20px;
       max-width: 700px;
       margin: 30px auto;
-      border-radius: 8px;
-      border: 1px solid #d4af37;
-      color: #3b2f1d;
-      font-family: 'Courier New', monospace;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 0 25px rgba(212,175,55,0.15);
+    }
+    .card-resultat h2 {
+      color: #d4af37;
+      font-size: 1.8em;
+      margin-bottom: 10px;
+    }
+    .card-resultat p {
+      font-size: 1.1em;
+      line-height: 1.6em;
+    }
+    .secondaires {
+      margin-top: 15px;
+      font-style: italic;
+      color: #6e573c;
     }
   </style>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500&display=swap" rel="stylesheet">
 </head>
 <body>
-  <img src="/logo-kabal.png" alt="KABAL logo" class="logo">
+  <img src="logo-kabal.png" alt="KABAL logo" class="logo">
   <h1>Test Kabbalistique – Découvre ta Séphira dominante</h1>
 
   <form id="sephirot-form">
@@ -76,6 +88,19 @@
   <div id="resultat"></div>
 
   <script>
+    const descriptions = {
+      "Binah": "La compréhension profonde, la sagesse silencieuse. Tu portes en toi la faculté d’analyser, de structurer et d’éclairer les autres.",
+      "Chokhmah": "L’intuition divine et le jaillissement d’idées pures. Tu es un canal d’inspiration.",
+      "Daat": "La conscience intérieure et la synthèse des forces. Tu es l’union entre la pensée et l’action.",
+      "Chesed": "L’amour inconditionnel, la bonté rayonnante. Tu donnes sans compter.",
+      "Gevurah": "La force, la rigueur et la justice. Tu protèges et structures ce qui t’entoure.",
+      "Tiferet": "L’équilibre, la beauté et la compassion. Tu harmonises les contraires.",
+      "Netzach": "La persévérance et la victoire. Tu poursuis ta mission avec passion.",
+      "Hod": "L’humilité, la sincérité et l’élégance de l’âme. Tu sais reconnaître le mystère.",
+      "Yesod": "Le lien, le fondement, la stabilité intérieure. Tu es un pilier pour les autres.",
+      "Malkhut": "La royauté, la réalisation concrète. Tu es fait pour incarner le spirituel dans la matière."
+    };
+
     document.getElementById("sephirot-form").addEventListener("submit", async function(e) {
       e.preventDefault();
       const birth_date = document.getElementById("birth_date").value;
@@ -92,10 +117,18 @@
       if (data.error) {
         container.innerHTML = `<p style='color: red;'>Erreur : ${data.error}</p>`;
       } else {
-        container.innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+        const desc = descriptions[data.dominante] || "Une lumière intérieure unique te guide.";
+        const second = data.secondaires?.length ? `<div class="secondaires">Soutiens : ${data.secondaires.join(", ")}</div>` : "";
+
+        container.innerHTML = `
+          <div class="card-resultat">
+            <h2>🔮 Ta Séphira dominante : ${data.dominante}</h2>
+            <p>${desc}</p>
+            ${second}
+          </div>
+        `;
       }
     });
   </script>
 </body>
 </html>
-
