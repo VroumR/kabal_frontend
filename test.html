@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>KABAL – Test Psychologique</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: 'Cormorant Garamond', serif;
+      background-color: #fff;
+      color: #3b2f1d;
+      text-align: center;
+      padding: 20px;
+    }
+    h1 {
+      color: #d4af37;
+    }
+    form {
+      max-width: 800px;
+      margin: auto;
+      background: #fffdf5;
+      padding: 30px;
+      border-radius: 10px;
+      border: 2px solid #d4af37;
+      box-shadow: 0 0 15px rgba(212,175,55,0.2);
+    }
+    .question {
+      margin-bottom: 30px;
+      text-align: left;
+    }
+    .question p {
+      margin: 0 0 10px;
+      font-weight: bold;
+    }
+    .scale {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 5px;
+    }
+    .scale label {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-size: 12px;
+    }
+    .scale input[type="radio"] {
+      margin: 5px auto;
+    }
+    button {
+      margin-top: 20px;
+      background-color: #d4af37;
+      color: white;
+      font-weight: bold;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #bfa337;
+    }
+    .resultat {
+      margin-top: 30px;
+      background-color: #fffdf5;
+      border: 2px solid #d4af37;
+      padding: 20px;
+      border-radius: 10px;
+      max-width: 700px;
+      margin: 30px auto;
+    }
+  </style>
+</head>
+<body>
+  <h1>Trouve ta Séphira</h1>
+  <form id="test-form"></form>
+  <div id="resultat" class="resultat"></div>
+
+  <script>
+    async function loadQuestions() {
+      const res = await fetch("https://kabal-blackend.onrender.com/questions");
+      const questions = await res.json();
+      const form = document.getElementById("test-form");
+
+      const labels = [
+        "Pas du tout d'accord",
+        "Plutôt pas d'accord",
+        "Neutre",
+        "Plutôt d'accord",
+        "Totalement d'accord"
+      ];
+
+      questions.forEach(q => {
+        const div = document.createElement("div");
+        div.className = "question";
+
+        let html = `<p>${q.id}. ${q.question}</p><div class="scale">`;
+        for (let i = 1; i <= 5; i++) {
+          html += `
+            <label>
+              ${labels[i - 1]}<br>
+              <input type="radio" name="q${q.id}" value="${i}" required>
+            </label>`;
+        }
+        html += `</div>`;
+        div.innerHTML = html;
+        form.appendChild(div);
+      });
+
+      const submit = document.createElement("button");
+      submit.type = "submit";
+      submit.textContent = "Analyser mes résultats";
+      form.appendChild(submit);
+    }
+
+    document.getElementById("test-form").addEventListener("submit", async function(e) {
+      e.preventDefault();
+
+      const formData = new FormData(e.target);
+      const data = [];
+
+      for (let [key, value] of formData.entries()) {
+        const id = parseInt(key.replace("q", ""));
+        data.push({ id, value: parseInt(value) });
+      }
+
+      const res = await fetch("https://kabal-blackend.onrender.com/analyser-test", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      });
+
+      const result = await res.json();
+      const out = document.getElementById("resultat");
+
+      if (result.error) {
+        out.innerHTML = `<p style='color:red;'>Erreur : ${result.error}</p>`;
+      } else {
+        out.innerHTML = `
+          <h2>🔮 Séphira dominante : ${result.dominante}</h2>
+          <p><strong>Soutiens :</strong> ${result.secondaires.join(", ")}</p>
+        `;
+      }
+    });
+
+    loadQuestions();
+  </script>
+</body>
+</html>
