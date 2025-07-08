@@ -655,7 +655,8 @@
 function updateProgress() {
   const total = questions.length;
   const answered = Array.from(document.querySelectorAll('input[type="radio"]:checked')).length;
-  document.getElementById("progress-text").textContent = `${answered}/${total} questions répondues`;
+ document.getElementById("progress-text").textContent = `${answered}/${total} questions répondues`;
+
 
   const percentage = (answered / total) * 100;
   document.getElementById("progress-fill").style.width = `${percentage}%`;
