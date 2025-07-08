@@ -640,7 +640,7 @@
 
 function buildQuiz() {
   const container = document.getElementById("questions-container");
-
+  
   questions.forEach((question, index) => {
     const questionDiv = document.createElement("div");
     questionDiv.className = "question";
@@ -652,35 +652,24 @@ function buildQuiz() {
           <input type="radio" name="q${index}" value="-2" onchange="updateProgress()">
           <div class="circle dark-red"></div>
           <span>Extrêmement pas d’accord</span>
-        </label> 
-        <label class="option-label-horizontal">
-          <input type="radio" name="q${index}" value="-1" onchange="updateProgress()">
-          <div class="circle light-red"></div>
-          <span>Plutôt pas d’accord</span>
         </label>
-        <label class="option-label-horizontal">
-          <input type="radio" name="q${index}" value="0" onchange="updateProgress()">
-          <div class="circle neutral"></div>
-          <span>Neutre</span>
-        </label>
-        <label class="option-label-horizontal">
-          <input type="radio" name="q${index}" value="1" onchange="updateProgress()">
-          <div class="circle light-green"></div>
-          <span>Plutôt d’accord</span>
-        </label>
+        ...
         <label class="option-label-horizontal">
           <input type="radio" name="q${index}" value="2" onchange="updateProgress()">
           <div class="circle dark-green"></div>
           <span>Extrêmement d’accord</span>
-          console.log("Quiz construit, bouton visible ?", document.getElementById("analyze-btn"));
-window.addEventListener("DOMContentLoaded", buildQuiz);
-
         </label>
       </div>
     `;
     container.appendChild(questionDiv);
-  }); // fin du forEach
-} // fin de buildQuiz
+  });
+}
+
+// ✅ Appel sécurisé au chargement
+window.addEventListener("DOMContentLoaded", () => {
+  buildQuiz();
+  console.log("Quiz construit, bouton visible ?", document.getElementById("analyze-btn"));
+});
 
 // ✅ Fonction updateProgress placée EN DEHORS
 function updateProgress() {
