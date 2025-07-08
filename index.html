@@ -549,6 +549,17 @@
         font-size: 1.2rem;
       }
     }
+ function updateProgress() {
+      const total = questions.length;
+      const answered = Array.from(document.querySelectorAll('input[type="radio"]:checked')).length;
+      document.getElementById("progress-text").textContent = `${answered}/${total} questions répondues`;
+
+      const percentage = (answered / total) * 100;
+      document.getElementById("progress-fill").style.width = `${percentage}%`;
+
+      const analyzeBtn = document.getElementById("analyze-btn");
+      if (analyzeBtn) analyzeBtn.disabled = answered < total;
+    }
 
   .options.horizontal { display: flex; gap: 10px; flex-wrap: wrap; }
   .option-label-horizontal { display: flex; flex-direction: column; align-items: center; width: 110px; font-size: 0.8rem; text-align: center; }
@@ -557,18 +568,7 @@
 </style>
 
 </head>
-function updateProgress() {
-  const total = questions.length;
-  const answered = Array.from(document.querySelectorAll('input[type="radio"]:checked')).length;
-  document.getElementById("progress-text").textContent = `${answered}/${total} questions répondues`;
 
-  const percentage = (answered / total) * 100;
-  document.getElementById("progress-fill").style.width = `${percentage}%`;
-
-  const analyzeBtn = document.getElementById("analyze-btn");
-  if (analyzeBtn) analyzeBtn.disabled = answered < total;
-}
-  
 
   <script>
     const questions = [
