@@ -558,12 +558,29 @@
 </style>
 
 </head>
-<body>
+<body onload="buildQuiz()">
   <div class="container">
-    <div id="progress-text"></div>
-    <div class="progress-bar"><div id="progress-fill" class="progress-fill"></div></div>
+    <header>
+      <div class="logo">KABAL</div>
+      <h1>Trouve ta Séphira</h1>
+      <p class="subtitle">Réponds aux affirmations pour révéler ta Sephira dominante</p>
+    </header>
+
+    <div class="progress-container">
+      <div class="progress-text" id="progress-text">0/30 questions répondues</div>
+      <div class="progress-bar">
+        <div class="progress-fill" id="progress-fill" style="width: 0%;"></div>
+      </div>
+    </div>
+
     <div id="questions-container"></div>
+
+    <div class="analyze-section">
+      <button class="analyze-button" id="analyze-btn" disabled onclick="alert('Analyse à venir')">Analyser</button>
+    </div>
   </div>
+</body>
+
 
   <script>
     const questions = [
