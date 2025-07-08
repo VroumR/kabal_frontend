@@ -48,7 +48,7 @@
     }
 
     .container {
-      max-width: 800px;
+      max-width: 900px;
       margin: 0 auto;
       padding: 0 20px;
     }
@@ -170,20 +170,6 @@
       box-shadow: 0 0 20px var(--shadow-gold);
     }
 
-    .page {
-      display: none;
-      animation: fadeIn 0.6s ease-in-out;
-    }
-
-    .page.active {
-      display: block;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
     .legend {
       background: var(--gradient-reverse);
       color: var(--text-dark);
@@ -224,12 +210,25 @@
       border-radius: 20px 20px 0 0;
     }
 
+    .question-number {
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      background: var(--gradient-gold);
+      color: var(--pure-white);
+      padding: 5px 12px;
+      border-radius: 15px;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
     .question p {
       font-size: 1.2rem;
       line-height: 1.6;
       margin-bottom: 20px;
       color: var(--text-dark);
       font-weight: 400;
+      margin-right: 80px;
     }
 
     .options {
@@ -340,38 +339,69 @@
       opacity: 0.8;
     }
 
-    .navigation {
+    .analyze-section {
       display: flex;
       justify-content: center;
-      gap: 20px;
-      margin: 40px 0;
-      padding: 30px 0;
+      margin: 50px 0;
+      padding: 40px 0;
     }
 
-    .navigation button {
-      padding: 15px 30px;
-      font-size: 1.1rem;
+    .analyze-button {
+      padding: 20px 50px;
+      font-size: 1.4rem;
       font-family: 'Cinzel', serif;
-      font-weight: 500;
+      font-weight: 600;
       border: none;
-      border-radius: 25px;
+      border-radius: 35px;
       cursor: pointer;
-      transition: all 0.3s ease;
+      transition: all 0.4s ease;
       background: var(--gradient-gold);
       color: var(--pure-white);
-      box-shadow: 0 5px 20px var(--shadow-gold);
-      min-width: 150px;
+      box-shadow: 0 10px 35px var(--shadow-gold);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      position: relative;
+      overflow: hidden;
     }
 
-    .navigation button:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 8px 30px var(--shadow-gold);
+    .analyze-button::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      transition: all 0.4s ease;
+    }
+
+    .analyze-button:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 18px 45px var(--shadow-gold);
       background: var(--gradient-reverse);
       color: var(--text-dark);
     }
 
-    .navigation button:active {
-      transform: translateY(0);
+    .analyze-button:hover::before {
+      width: 300px;
+      height: 300px;
+    }
+
+    .analyze-button:active {
+      transform: translateY(-4px);
+    }
+
+    .analyze-button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .analyze-button:disabled:hover {
+      transform: none;
+      box-shadow: 0 10px 35px var(--shadow-gold);
     }
 
     .result-modal {
@@ -427,6 +457,13 @@
       text-shadow: 0 2px 4px rgba(212, 175, 55, 0.3);
     }
 
+    .result-description {
+      font-size: 1.1rem;
+      line-height: 1.6;
+      color: var(--text-dark);
+      margin: 20px 0;
+    }
+
     .close-result {
       margin-top: 30px;
       padding: 12px 25px;
@@ -441,8 +478,44 @@
     }
 
     .close-result:hover {
-      transform: scale(1.05);
-      box-shadow: 0 5px 20px var(--shadow-gold);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px var(--shadow-gold);
+    }
+
+    .progress-container {
+      background: var(--pure-white);
+      padding: 20px;
+      border-radius: 15px;
+      margin: 30px 0;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+      border: 1px solid var(--light-gold);
+    }
+
+    .progress-text {
+      text-align: center;
+      font-size: 1.1rem;
+      color: var(--dark-gold);
+      margin-bottom: 10px;
+      font-weight: 500;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 8px;
+      background: var(--light-gold);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: var(--gradient-gold);
+      transition: width 0.3s ease;
+      border-radius: 4px;
+    }
+
+    .hidden {
+      display: none !important;
     }
 
     @media (max-width: 768px) {
@@ -457,6 +530,10 @@
       .question {
         padding: 20px;
       }
+
+      .question p {
+        margin-right: 60px;
+      }
       
       .options {
         gap: 8px;
@@ -466,10 +543,10 @@
         width: 40px;
         height: 40px;
       }
-      
-      .navigation button {
-        min-width: 120px;
-        padding: 12px 20px;
+
+      .analyze-button {
+        padding: 18px 35px;
+        font-size: 1.2rem;
       }
     }
   </style>
@@ -483,11 +560,38 @@
     </header>
 
     <div class="dob-container">
-      <label for="dob">📅 Ta date de naissance :</label>
+      <label for="dob">📅 Ta date de naissance (optionnel) :</label>
       <input type="date" id="dob" />
+      <p style="margin-top: 10px; font-size: 0.9rem; opacity: 0.7;">
+        Peut influencer votre résultat selon le calendrier hébraïque
+      </p>
     </div>
 
-    <div id="quiz-container"></div>
+    <div class="legend">
+      <strong>🎯 Échelle de réponses :</strong><br>
+      <span style="color: #8B0000;">■</span> Totalement en désaccord (-2) • 
+      <span style="color: #DC143C;">■</span> Plutôt pas d'accord (-1) • 
+      <span style="color: #888;">■</span> Neutre (0) • 
+      <span style="color: var(--primary-gold);">■</span> Plutôt d'accord (+1) • 
+      <span style="color: var(--dark-gold);">■</span> Totalement d'accord (+2)
+    </div>
+
+    <div class="progress-container">
+      <div class="progress-text">
+        <span id="progress-text">0/30 questions répondues</span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill" id="progress-fill"></div>
+      </div>
+    </div>
+
+    <div id="questions-container"></div>
+
+    <div class="analyze-section">
+      <button class="analyze-button" id="analyze-btn" disabled onclick="analyzeResults()">
+        🔮 Analyser mes réponses
+      </button>
+    </div>
   </div>
 
   <script>
@@ -524,6 +628,19 @@
       { text: "Je trouve du sacré dans la simplicité des choses ordinaires et je rends grâce pour ce que j'ai.", weights: { Malkhout: 0.7 } }
     ];
 
+    const sephirotDescriptions = {
+      Hokhmah: "La Sagesse - Vous incarnez l'intuition pure et la réceptivité aux idées divines. Votre force réside dans votre capacité à accueillir la connaissance avec humilité.",
+      Binah: "L'Intelligence - Vous excellez dans la compréhension profonde et l'analyse. Votre empathie et votre patience vous permettent de saisir les nuances subtiles.",
+      Daat: "La Connaissance - Vous savez unifier intellect et émotion. Votre quête d'incarnation du savoir vous rend particulièrement authentique.",
+      Hessed: "La Bonté - Votre cœur généreux et votre compassion naturelle font de vous un pilier de soutien pour les autres. Votre altruisme est votre force.",
+      Guevoura: "La Justice - Vous possédez le courage de défendre vos convictions et d'imposer des limites nécessaires. Votre sens de la justice guide vos actions.",
+      Tiferet: "La Beauté - Vous cherchez l'harmonie et l'équilibre en toutes choses. Votre capacité à réconcilier les opposés fait de vous un médiateur naturel.",
+      Netzach: "La Victoire - Votre persévérance et votre détermination vous permettent de surmonter tous les obstacles. Vous ne renoncez jamais à vos objectifs.",
+      Hod: "La Gloire - Votre humilité intellectuelle et votre honnêteté dans la communication font de vous une personne de confiance et de sagesse.",
+      Yesod: "Le Fondement - Votre intégrité et votre fiabilité constituent les bases solides sur lesquelles d'autres peuvent s'appuyer. Vous incarnez la stabilité.",
+      Malkhout: "Le Royaume - Vous trouvez le sacré dans le quotidien et savez incarner la spiritualité dans la vie pratique. Votre dévotion illumine votre chemin."
+    };
+
     const hebrewMonthToSephira = {
       1: "Netzach", 2: "Hod", 3: "Tiferet",
       4: "Guevoura", 5: "Hod", 6: "Yesod",
@@ -531,181 +648,52 @@
       10: "Guevoura", 11: "Hessed", 12: "Tiferet"
     };
 
-    function shuffle(array) {
-      for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-      }
-    }
+    let answeredQuestions = 0;
 
     function buildQuiz() {
-      shuffle(questions);
-      const container = document.getElementById("quiz-container");
+      const container = document.getElementById("questions-container");
       
-      const legend = document.createElement("div");
-      legend.className = "legend";
-      legend.innerHTML = `
-        <strong>Échelle de réponses :</strong><br>
-        Rouge foncé = Totalement en désaccord (-2) • Rouge clair = Plutôt pas d'accord (-1) • Gris = Neutre (0) • Or clair = Plutôt d'accord (+1) • Or foncé = Totalement d'accord (+2)
-      `;
-      container.appendChild(legend);
-
-      let qIndex = 1;
-      
-      for (let p = 1; p <= 5; p++) {
-        const pageDiv = document.createElement("div");
-        pageDiv.className = "page";
-        pageDiv.id = "page-" + p;
-        
-        for (let k = 0; k < 6; k++) {
-          const q = questions[(p - 1) * 6 + k];
-          if (!q) break;
-          
-          const qDiv = document.createElement("div");
-          qDiv.className = "question";
-          
-          const pQ = document.createElement("p");
-          pQ.textContent = qIndex + ". " + q.text;
-          qDiv.appendChild(pQ);
-          
-          const optDiv = document.createElement("div");
-          optDiv.className = "options";
-          
-          const values = [
-            {val: -2, cls: "dark-red", label: "Totalement en désaccord"},
-            {val: -1, cls: "light-red", label: "Plutôt pas d'accord"},
-            {val: 0, cls: "neutral", label: "Neutre"},
-            {val: 1, cls: "light-green", label: "Plutôt d'accord"},
-            {val: 2, cls: "dark-green", label: "Totalement d'accord"}
-          ];
-          
-          values.forEach(v => {
-            const lbl = document.createElement("label");
-            const radio = document.createElement("input");
-            radio.type = "radio";
-            radio.name = "q" + qIndex;
-            radio.value = v.val;
-            
-            const span = document.createElement("span");
-            span.className = "circle " + v.cls;
-            span.title = v.label;
-            
-            const labelText = document.createElement("span");
-            labelText.className = "option-label";
-            labelText.textContent = v.val > 0 ? "+" + v.val : v.val.toString();
-            
-            lbl.appendChild(radio);
-            lbl.appendChild(span);
-            lbl.appendChild(labelText);
-            optDiv.appendChild(lbl);
-          });
-          
-          qDiv.appendChild(optDiv);
-          pageDiv.appendChild(qDiv);
-          qIndex++;
-        }
-        
-        const navDiv = document.createElement("div");
-        navDiv.className = "navigation";
-        
-        if (p > 1) {
-          const prevBtn = document.createElement("button");
-          prevBtn.textContent = "← Précédent";
-          prevBtn.onclick = prevPage;
-          navDiv.appendChild(prevBtn);
-        }
-        
-        if (p < 5) {
-          const nextBtn = document.createElement("button");
-          nextBtn.textContent = "Suivant →";
-          nextBtn.onclick = nextPage;
-          navDiv.appendChild(nextBtn);
-        }
-        
-        if (p === 5) {
-          const analyseBtn = document.createElement("button");
-          analyseBtn.textContent = "✨ Analyser mes résultats";
-          analyseBtn.onclick = analyse;
-          navDiv.appendChild(analyseBtn);
-        }
-        
-        pageDiv.appendChild(navDiv);
-        container.appendChild(pageDiv);
-      }
-      
-      showPage(1);
+      questions.forEach((question, index) => {
+        const questionDiv = document.createElement("div");
+        questionDiv.className = "question";
+        questionDiv.innerHTML = `
+          <div class="question-number">${index + 1}/30</div>
+          <p>${question.text}</p>
+          <div class="options">
+            <label>
+              <input type="radio" name="q${index}" value="-2" onchange="updateProgress()">
+              <div class="circle dark-red"></div>
+              <span class="option-label">-2</span>
+            </label>
+            <label>
+              <input type="radio" name="q${index}" value="-1" onchange="updateProgress()">
+              <div class="circle light-red"></div>
+              <span class="option-label">-1</span>
+            </label>
+            <label>
+              <input type="radio" name="q${index}" value="0" onchange="updateProgress()">
+              <div class="circle neutral"></div>
+              <span class="option-label">0</span>
+            </label>
+            <label>
+              <input type="radio" name="q${index}" value="1" onchange="updateProgress()">
+              <div class="circle light-green"></div>
+              <span class="option-label">+1</span>
+            </label>
+            <label>
+              <input type="radio" name="q${index}" value="2" onchange="updateProgress()">
+              <div class="circle dark-green"></div>
+              <span class="option-label">+2</span>
+            </label>
+          </div>
+        `;
+        container.appendChild(questionDiv);
+      });
     }
 
-    let currentPage = 1;
-
-    function showPage(n) {
-      document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
-      const page = document.getElementById("page-" + n);
-      if (page) {
-        page.classList.add("active");
-        currentPage = n;
-      }
-    }
-
-    function nextPage() { 
-      showPage(currentPage + 1); 
-    }
-
-    function prevPage() { 
-      showPage(currentPage - 1); 
-    }
-
-    function analyse() {
-      const dob = document.getElementById("dob").value;
-      const month = dob ? new Date(dob).getMonth() + 1 : null;
+    function updateProgress() {
+      const totalQuestions = questions.length;
+      answeredQuestions = 0;
       
-      const scores = {
-        "Daat": 0, "Hokhmah": 0, "Binah": 0, "Hessed": 0, "Guevoura": 0,
-        "Tiferet": 0, "Hod": 0, "Netzach": 0, "Yesod": 0, "Malkhout": 0
-      };
-      
-      for (let i = 1; i <= questions.length; i++) {
-        const radios = document.getElementsByName("q" + i);
-        let val = 0;
-        radios.forEach(r => { if (r.checked) val = parseInt(r.value); });
-        const weights = questions[i - 1].weights;
-        for (const s in weights) {
-          scores[s] += weights[s] * val;
-        }
-      }
-      
-      if (month && hebrewMonthToSephira[month]) {
-        scores[hebrewMonthToSephira[month]] += 2;
-      }
-      
-      const sorted = Object.keys(scores).sort((a, b) => scores[b] - scores[a]);
-      
-      showResult(sorted[0], sorted[1], sorted[2]);
-    }
-
-    function showResult(primary, secondary, tertiary) {
-      const modal = document.createElement("div");
-      modal.className = "result-modal";
-      
-      const content = document.createElement("div");
-      content.className = "result-content";
-      
-      content.innerHTML = `
-        <h2 class="result-title">🔮 Votre Séphira Dominante</h2>
-        <div class="result-sephira">${primary}</div>
-        <p><strong>Séphiroth secondaires :</strong><br>${secondary} et ${tertiary}</p>
-        <button class="close-result" onclick="closeResult()">Fermer</button>
-      `;
-      
-      modal.appendChild(content);
-      document.body.appendChild(modal);
-      
-      window.closeResult = function() {
-        document.body.removeChild(modal);
-      };
-    }
-
-    document.addEventListener("DOMContentLoaded", buildQuiz);
-  </script>
-</body>
-</html>
+      for (let i = 0; i < totalQuestions; i++) {
+        const radios = document.querySelectorAll(`input[name="q${i}"]`);
