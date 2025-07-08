@@ -576,7 +576,8 @@
     <div id="questions-container"></div>
 
     <div class="analyze-section">
-      <button class="analyze-button" id="analyze-btn" disabled onclick="alert('Analyse à venir')">Analyser</button>
+     <button class="analyze-button" id="analyze-btn" disabled>Analyser</button>
+
     </div>
   </div>
 </body>
@@ -698,8 +699,10 @@ function updateProgress() {
 }
 
 
-   buildQuiz(); // ⚠️ Très important
-document.getElementById("analyze-btn").addEventListener("click", analyzeResult);
+ window.addEventListener("DOMContentLoaded", () => {
+  buildQuiz(); // ✅ Construit le quiz après que la page soit chargée
+  document.getElementById("analyze-btn").addEventListener("click", analyzeResult);
+});
 
    
 function analyzeResult() {
