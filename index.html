@@ -553,6 +553,24 @@
 
   .options.horizontal { display: flex; gap: 10px; flex-wrap: wrap; }
   .option-label-horizontal { display: flex; flex-direction: column; align-items: center; width: 110px; font-size: 0.8rem; text-align: center; }
+.hidden {
+  display: none;
+}
+#result-section {
+  background: #f5f2eb;
+  padding: 30px;
+  border-radius: 10px;
+  margin-top: 40px;
+  text-align: center;
+}
+#result-section h2 {
+  color: #B8860B;
+  font-family: 'Cinzel', serif;
+}
+#result-section p {
+  font-size: 1.2em;
+  margin: 15px 0;
+}
 
 
 </style>
@@ -574,6 +592,13 @@
     </div>
 
     <div id="questions-container"></div>
+    <div id="result-section" class="hidden">
+  <h2>✨ Voici tes résultats</h2>
+  <p id="main-sephira-text"></p>
+  <p id="secondary-sephira-text"></p>
+  <button onclick="location.reload()">🔄 Recommencer</button>
+</div>
+
 
     <div class="analyze-section">
      <button class="analyze-button" id="analyze-btn" disabled>Analyser</button>
@@ -729,8 +754,18 @@ function analyzeResult() {
   const secondDescription = sephirotDescriptions[secondSephira] || "Pas de description.";
 
   // Affiche le résultat
-  alert(`✨ Ta Séphira dominante est : ${bestSephira}\n${bestDescription}\n\n🌟 Ta Séphira secondaire est : ${secondSephira}\n${secondDescription}`);
-}
+ // ➤ Cacher les éléments et afficher les résultats
+document.getElementById("questions-container").style.display = "none";
+document.querySelector(".progress-container").style.display = "none";
+document.getElementById("analyze-btn").style.display = "none";
+document.getElementById("result-section").classList.remove("hidden");
+
+// ➤ Insérer les résultats dans le HTML
+document.getElementById("main-sephira-text").innerHTML =
+  `<strong>${bestSephira}</strong><br>${bestDescription}`;
+document.getElementById("secondary-sephira-text").innerHTML =
+  `<strong>${secondSephira}</strong><br>${secondDescription}`;
+
  window.addEventListener("DOMContentLoaded", () => {
   buildQuiz(); // ✅ Construit le quiz après que la page soit chargée
   document.getElementById("analyze-btn").addEventListener("click", analyzeResult);
