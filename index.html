@@ -616,48 +616,52 @@
 
     let answeredQuestions = 0;
 
-    function buildQuiz() {
-      const container = document.getElementById("questions-container");
-      
-      questions.forEach((question, index) => {
-        const questionDiv = document.createElement("div");
-        questionDiv.className = "question";
-        questionDiv.innerHTML = `
-          <div class="question-number">${index + 1}/30</div>
-          <p>${question.text}</p>
-         <div class="options horizontal">
-  <label class="option-label-horizontal">
-    <input type="radio" name="q${index}" value="-2" onchange="updateProgress()">
-    <div class="circle dark-red"></div>
-    <span>Extrêmement pas d’accord</span>
-  </label> 
+function buildQuiz() {
+  const container = document.getElementById("questions-container");
 
-  <label class="option-label-horizontal">
-    <input type="radio" name="q${index}" value="-1" onchange="updateProgress()">
-    <div class="circle light-red"></div>
-    <span>Plutôt pas d’accord</span>
-  </label>
-  <label class="option-label-horizontal">
-    <input type="radio" name="q${index}" value="0" onchange="updateProgress()">
-    <div class="circle neutral"></div>
-    <span>Neutre</span>
-  </label>
-  <label class="option-label-horizontal">
-    <input type="radio" name="q${index}" value="1" onchange="updateProgress()">
-    <div class="circle light-green"></div>
-    <span>Plutôt d’accord</span>
-  </label>
-  <label class="option-label-horizontal">
-    <input type="radio" name="q${index}" value="2" onchange="updateProgress()">
-    <div class="circle dark-green"></div>
-    <span>Extrêmement d’accord</span>
-    </label>
+  questions.forEach((question, index) => {
+    const questionDiv = document.createElement("div");
+    questionDiv.className = "question";
+    questionDiv.innerHTML = `
+      <div class="question-number">${index + 1}/30</div>
+      <p>${question.text}</p>
+      <div class="options horizontal">
+        <label class="option-label-horizontal">
+          <input type="radio" name="q${index}" value="-2" onchange="updateProgress()">
+          <div class="circle dark-red"></div>
+          <span>Extrêmement pas d’accord</span>
+        </label> 
+        <label class="option-label-horizontal">
+          <input type="radio" name="q${index}" value="-1" onchange="updateProgress()">
+          <div class="circle light-red"></div>
+          <span>Plutôt pas d’accord</span>
+        </label>
+        <label class="option-label-horizontal">
+          <input type="radio" name="q${index}" value="0" onchange="updateProgress()">
+          <div class="circle neutral"></div>
+          <span>Neutre</span>
+        </label>
+        <label class="option-label-horizontal">
+          <input type="radio" name="q${index}" value="1" onchange="updateProgress()">
+          <div class="circle light-green"></div>
+          <span>Plutôt d’accord</span>
+        </label>
+        <label class="option-label-horizontal">
+          <input type="radio" name="q${index}" value="2" onchange="updateProgress()">
+          <div class="circle dark-green"></div>
+          <span>Extrêmement d’accord</span>
+        </label>
+      </div>
     `;
+    container.appendChild(questionDiv);
+  }); // fin du forEach
+} // fin de buildQuiz
+
+// ✅ Fonction updateProgress placée EN DEHORS
 function updateProgress() {
   const total = questions.length;
   const answered = Array.from(document.querySelectorAll('input[type="radio"]:checked')).length;
-document.getElementById("progress-text").textContent = answered + "/" + total + " questions répondues";
-
+  document.getElementById("progress-text").textContent = answered + "/" + total + " questions répondues";
 
   const percentage = (answered / total) * 100;
   document.getElementById("progress-fill").style.width = `${percentage}%`;
@@ -665,7 +669,7 @@ document.getElementById("progress-text").textContent = answered + "/" + total + 
   const analyzeBtn = document.getElementById("analyze-btn");
   if (analyzeBtn) analyzeBtn.disabled = answered < total;
 }
- 
+
 
     </script>
   </body>
