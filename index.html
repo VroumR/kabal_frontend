@@ -551,6 +551,111 @@
     }
   </style>
 </head>
+  
+const questions = [
+  { text: "Je cherche à faire le lien entre mes connaissances intellectuelles et mes émotions pour que mon savoir soit cohérent et incarné.", weights: { Daat: 0.8, Tiferet: 0.2 } },
+  { text: "Quand j'apprends quelque chose de nouveau, j'essaie de l'intégrer concrètement dans ma vie plutôt que de rester sur le plan théorique.", weights: { Daat: 0.8 } },
+  { text: "Je valorise la cohérence intérieure et j'harmonise mes idées contradictoires pour parvenir à une compréhension unifiée.", weights: { Daat: 0.8 } },
+  { text: "Je fais souvent l'expérience d'une intuition soudaine qui éclaire d'emblée une situation complexe.", weights: { Hokhmah: 0.8 } },
+  { text: "Je reconnais humblement mes limites intellectuelles et reste ouvert(e) aux idées qui dépassent ma compréhension.", weights: { Hokhmah: 0.7 } },
+  { text: "Je sais rester curieux(se) et ouvert(e) : je ne cherche pas à prouver que j'ai toujours raison, mais j'accueille les enseignements extérieurs avec humilité.", weights: { Hokhmah: 0.7 } },
+  { text: "Je prends le temps de réfléchir en profondeur avant de prendre une décision importante, faisant preuve de patience.", weights: { Binah: 0.8 } },
+  { text: "Je réfléchis aux détails et j'assemble les éléments d'une situation pour en saisir l'ensemble.", weights: { Binah: 0.7 } },
+  { text: "Je fais preuve d'empathie : j'essaie vraiment de comprendre en profondeur ce que ressentent les autres.", weights: { Binah: 0.8 } },
+  { text: "Je me sens poussé(e) à faire le bien même quand personne ne regarde.", weights: { Hessed: 1.0 } },
+  { text: "J'ai du mal à dire non lorsque l'on me sollicite, même si je sais que cela va à l'encontre de mes besoins.", weights: { Hessed: 0.8, Guevoura: 0.2 } },
+  { text: "Je pardonne facilement les erreurs des autres et essaie toujours de voir leur bon côté.", weights: { Hessed: 0.8 } },
+  { text: "Je sais dire \"non\" et imposer des limites claires lorsque c'est nécessaire, sans hésitation.", weights: { Guevoura: 1.0 } },
+  { text: "Je crois qu'il faut parfois défendre la justice avec fermeté, même si cela peut blesser ou déplaire.", weights: { Guevoura: 0.8 } },
+  { text: "Je trouve de la force à maintenir l'ordre et la structure pour protéger ce qui est juste.", weights: { Guevoura: 0.8 } },
+  { text: "J'essaie d'équilibrer mes élans de bonté avec mon sens de la justice pour agir avec compassion.", weights: { Tiferet: 0.8 } },
+  { text: "Je cherche à réconcilier des points de vue divergents en trouvant un compromis équitable pour tous.", weights: { Tiferet: 0.7 } },
+  { text: "J'aime apporter de l'harmonie autour de moi en agissant avec empathie, sincérité et droiture.", weights: { Tiferet: 0.7 } },
+  { text: "Je choisis mes mots avec soin pour être clair(e) et je valorise l'honnêteté intellectuelle dans mes échanges.", weights: { Hod: 0.8 } },
+  { text: "Je reconnais facilement mes erreurs et j'exprime ma gratitude quand on m'apprend quelque chose de nouveau.", weights: { Hod: 0.7 } },
+  { text: "Je fais preuve d'humilité dans mes opinions et je structure mes idées avant de les exprimer.", weights: { Hod: 0.7 } },
+  { text: "Je persévère dans mes projets jusqu'à leur aboutissement, même si les progrès sont lents.", weights: { Netzach: 0.9 } },
+  { text: "Je puise en moi la patience et le courage nécessaires pour surmonter les obstacles.", weights: { Netzach: 0.8 } },
+  { text: "Je me sens fier(ère) lorsque je mène quelque chose à terme grâce à ma détermination constante.", weights: { Netzach: 0.7 } },
+  { text: "Je m'efforce de faire correspondre mes actions à mes paroles : l'intégrité est essentielle pour moi.", weights: { Yesod: 0.8 } },
+  { text: "Je bâtis patiemment mes projets de manière structurée plutôt que de rêver sans les réaliser.", weights: { Yesod: 0.7 } },
+  { text: "Je reste sincère et fiable en toutes circonstances, car je crois que c'est le fondement de toute relation solide.", weights: { Yesod: 0.7 } },
+  { text: "Je ressens la présence du divin dans les détails de ma vie quotidienne et je cultive un espace de paix chez moi.", weights: { Malkhout: 0.8 } },
+  { text: "J'essaie d'incarner mes idéaux spirituels dans ma vie de tous les jours, en étant humble et dévoué(e) dans mes actions.", weights: { Malkhout: 0.7 } },
+  { text: "Je trouve du sacré dans la simplicité des choses ordinaires et je rends grâce pour ce que j'ai.", weights: { Malkhout: 0.7 } }
+];
+
+const hebrewMonthToSephira = {
+  1: "Netzach", 2: "Hod", 3: "Tiferet", 4: "Guevoura",
+  5: "Hod", 6: "Yesod", 7: "Malkhout", 8: "Binah",
+  9: "Hokhmah", 10: "Guevoura", 11: "Hessed", 12: "Tiferet"
+};
+
+function updateProgress() {
+  const total = questions.length;
+  let count = 0;
+  for (let i = 0; i < total; i++) {
+    const radios = document.getElementsByName("q" + i);
+    if ([...radios].some(r => r.checked)) count++;
+  }
+  document.getElementById("progress-text").innerText = `${count}/${total} questions répondues`;
+  document.getElementById("progress-fill").style.width = `${(count / total) * 100}%`;
+  document.getElementById("analyze-btn").disabled = count !== total;
+}
+
+function buildQuiz() {
+  const container = document.getElementById("questions-container");
+  questions.forEach((q, i) => {
+    const div = document.createElement("div");
+    div.className = "question";
+    div.innerHTML = `
+      <div class="question-number">${i + 1}/30</div>
+      <p>${q.text}</p>
+      <div class="options">
+        ${[-2, -1, 0, 1, 2].map(val => {
+          const cls = ["dark-red", "light-red", "neutral", "light-green", "dark-green"][val + 2];
+          return `
+            <label>
+              <input type="radio" name="q${i}" value="${val}" onchange="updateProgress()">
+              <div class="circle ${cls}"></div>
+              <span class="option-label">${val > 0 ? '+' : ''}${val}</span>
+            </label>
+          `;
+        }).join('')}
+      </div>
+    `;
+    container.appendChild(div);
+  });
+}
+
+function analyzeResults() {
+  const scores = {
+    Daat: 0, Hokhmah: 0, Binah: 0, Hessed: 0, Guevoura: 0,
+    Tiferet: 0, Hod: 0, Netzach: 0, Yesod: 0, Malkhout: 0
+  };
+
+  questions.forEach((q, i) => {
+    const val = parseInt((document.querySelector(`input[name="q${i}"]:checked`) || {}).value || 0);
+    for (const s in q.weights) {
+      scores[s] += q.weights[s] * val;
+    }
+  });
+
+  const dob = document.getElementById("dob").value;
+  if (dob) {
+    const m = new Date(dob).getMonth() + 1;
+    if (hebrewMonthToSephira[m]) scores[hebrewMonthToSephira[m]] += 2;
+  }
+
+  const sorted = Object.entries(scores).sort(([, a], [, b]) => b - a);
+  const [top1, top2, top3] = sorted.slice(0, 3);
+
+  alert(`🔮 Ta Séphira dominante : ${top1[0]}\nSuivantes : ${top2[0]} et ${top3[0]}`);
+}
+
+document.addEventListener("DOMContentLoaded", buildQuiz);
+
+
 <body>
   <div class="container">
     <header>
