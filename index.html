@@ -795,10 +795,34 @@ document.addEventListener("DOMContentLoaded", buildQuiz);
         container.appendChild(questionDiv);
       });
     }
+ function buildQuiz() {
+      const container = document.getElementById("questions-container");
+      questions.forEach((q, i) => {
+        const div = document.createElement("div");
+        div.className = "question";
+        div.innerHTML = `
+          <div class="question-number">${i + 1}/30</div>
+          <p>${q.text}</p>
+          <div class="options">
+            ${[-2, -1, 0, 1, 2].map(val => {
+              const cls = ["dark-red", "light-red", "neutral", "light-green", "dark-green"][val + 2];
+              return `
+                <label>
+                  <input type="radio" name="q${i}" value="${val}" onchange="updateProgress()">
+                  <div class="circle ${cls}"></div>
+                  <span class="option-label">${val > 0 ? '+' : ''}${val}</span>
+                </label>
+              `;
+            }).join('')}
+          </div>
+        `;
+        container.appendChild(div);
+      });
+    }
 
-    function updateProgress() {
-      const totalQuestions = questions.length;
-      answeredQuestions = 0;
-      
-      for (let i = 0; i < totalQuestions; i++) {
-        const radios = document.querySelectorAll(`input[name="q${i}"]`);
+    document.addEventListener("DOMContentLoaded", () => {
+      buildQuiz();
+    });
+  </script>
+</body>
+</html>
