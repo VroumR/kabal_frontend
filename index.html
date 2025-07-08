@@ -1,168 +1,286 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>KABAL – Test des Séphirot</title>
-  <link rel="icon" href="logo-kabal.pdf">
-  <style>
-    body {
-      font-family: 'Cormorant Garamond', serif;
-      background-color: #ffffff;
-      color: #3b2f1d;
-      text-align: center;
-      padding: 40px;
-    }
-    img.logo {
-      width: 120px;
-      margin-bottom: 20px;
-    }
-    h1 {
-      color: #d4af37;
-      font-size: 2em;
-      letter-spacing: 1px;
-    }
-    form {
-      background-color: #fff;
-      padding: 30px;
-      border-radius: 12px;
-      box-shadow: 0 0 20px rgba(212,175,55,0.2);
-      max-width: 420px;
-      margin: auto;
-      border: 2px solid #d4af37;
-    }
-    input, button {
-      padding: 12px;
-      width: 85%;
-      margin-bottom: 18px;
-      border-radius: 6px;
-      border: 1px solid #d4af37;
-      font-size: 16px;
-      background-color: #fff;
-    }
-    button {
-      background-color: #d4af37;
-      color: white;
-      font-weight: bold;
-      transition: background-color 0.3s ease;
-    }
-    button:hover {
-      background-color: #bfa337;
-    }
-    .card-resultat {
-      border: 2px solid #d4af37;
-      background-color: #fffdf5;
-      max-width: 700px;
-      margin: 30px auto;
-      padding: 30px;
-      border-radius: 12px;
-      box-shadow: 0 0 25px rgba(212,175,55,0.15);
-    }
-    .card-resultat h2 {
-      color: #d4af37;
-      font-size: 1.8em;
-      margin-bottom: 10px;
-    }
-    .card-resultat p {
-      font-size: 1.1em;
-      line-height: 1.6em;
-    }
-    .secondaires {
-      margin-top: 15px;
-      font-style: italic;
-      color: #6e573c;
-    }
-    .link-test {
-      display: inline-block;
-      margin-top: 30px;
-      background-color: #d4af37;
-      color: white;
-      padding: 14px 28px;
-      border-radius: 8px;
-      text-decoration: none;
-      font-weight: bold;
-      font-size: 18px;
-      box-shadow: 0 0 10px rgba(212, 175, 55, 0.4);
-    }
-    .link-test:hover {
-      background-color: #bfa337;
-    }
-  </style>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500&display=swap" rel="stylesheet">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Questionnaire Psychospirituel par Séphira</title>
+<link href="https://fonts.googleapis.com/css?family=Cormorant+Garamond&display=swap" rel="stylesheet">
+<style>
+body {
+    font-family: 'Cormorant Garamond', serif;
+    background-color: #ffffff;
+    color: #333333;
+    margin: 0;
+    padding: 0;
+}
+#quiz-container {
+    max-width: 800px;
+    margin: auto;
+    padding: 20px;
+}
+h1 {
+    text-align: center;
+    color: #FFD700;
+    margin-bottom: 1em;
+}
+.legend {
+    font-size: 0.9em;
+    margin-bottom: 1em;
+    text-align: center;
+    color: #555555;
+}
+.page {
+    display: none;
+}
+.page.active {
+    display: block;
+}
+.question {
+    margin-bottom: 1.5em;
+}
+.question p {
+    font-size: 1.1em;
+    margin: 0 0 0.5em 0;
+}
+.options {
+    display: flex;
+    justify-content: space-between;
+    max-width: 400px;
+    margin: 0.5em 0;
+}
+label {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    font-size: 0.9em;
+    color: #555;
+}
+input[type="radio"] {
+    display: none;
+}
+.circle {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    margin-bottom: 0.3em;
+    border: 2px solid #888;
+}
+.dark-red { background-color: #C51C1C; border-color: #800000; }
+.light-red { background-color: #F08080; border-color: #D2691E; }
+.neutral   { background-color: #CCCCCC; border-color: #888888; }
+.light-green { background-color: #90EE90; border-color: #228B22; }
+.dark-green { background-color: #006400; border-color: #004d00; }
+button {
+    background-color: #FFD700;
+    border: none;
+    color: #ffffff;
+    padding: 10px 20px;
+    margin: 10px 5px;
+    font-size: 1em;
+    cursor: pointer;
+    border-radius: 5px;
+}
+button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+.navigation {
+    text-align: center;
+    margin-top: 20px;
+}
+</style>
 </head>
 <body>
-  <img src="logo-kabal.png" alt="KABAL logo" class="logo">
-  <h1>Test Kabbalistique – Découvre ta Séphira dominante</h1>
 
-  <form id="sephirot-form">
-    <input type="date" id="birth_date" required><br>
-    <input type="time" id="birth_time" required><br>
-    <button type="submit">Analyser</button>
-  </form>
+<h1>Questionnaire Psychospirituel par Séphira</h1>
+<div id="quiz-container"></div>
 
-  <a href="test.html" class="link-test">🔮 Faire le test des Séphirot</a>
+<script>
+// Données des questions (texte exact et pondérations par Séphira)
+var questions = [
+    {"text":"Je cherche à faire le lien entre mes connaissances intellectuelles et mes émotions pour que mon savoir soit cohérent et incarné.","weights":{"Daat":0.8,"Tiferet":0.2}},
+    {"text":"Quand j’apprends quelque chose de nouveau, j’essaie de l’intégrer concrètement dans ma vie plutôt que de rester sur le plan théorique.","weights":{"Daat":0.8}},
+    {"text":"Je valorise la cohérence intérieure et j’harmonise mes idées contradictoires pour parvenir à une compréhension unifiée.","weights":{"Daat":0.8}},
+    {"text":"Je fais souvent l’expérience d’une intuition soudaine qui éclaire d’emblée une situation complexe.","weights":{"Hokhmah":0.8}},
+    {"text":"Je reconnais humblement mes limites intellectuelles et reste ouvert(e) aux idées qui dépassent ma compréhension.","weights":{"Hokhmah":0.7}},
+    {"text":"Je sais rester curieux(se) et ouvert(e) : je ne cherche pas à prouver que j’ai toujours raison, mais j’accueille les enseignements extérieurs avec humilité.","weights":{"Hokhmah":0.7}},
+    {"text":"Je prends le temps de réfléchir en profondeur avant de prendre une décision importante, faisant preuve de patience.","weights":{"Binah":0.8}},
+    {"text":"Je réfléchis aux détails et j’assemble les éléments d’une situation pour en saisir l’ensemble.","weights":{"Binah":0.7}},
+    {"text":"Je fais preuve d’empathie : j’essaie vraiment de comprendre en profondeur ce que ressentent les autres.","weights":{"Binah":0.8}},
+    {"text":"Je me sens poussé(e) à faire le bien même quand personne ne regarde.","weights":{"Hessed":1.0}},
+    {"text":"J’ai du mal à dire non lorsque l’on me sollicite, même si je sais que cela va à l’encontre de mes besoins.","weights":{"Hessed":0.8,"Guevoura":0.2}},
+    {"text":"Je pardonne facilement les erreurs des autres et essaie toujours de voir leur bon côté.","weights":{"Hessed":0.8}},
+    {"text":"Je sais dire “non” et imposer des limites claires lorsque c’est nécessaire, sans hésitation.","weights":{"Guevoura":1.0}},
+    {"text":"Je crois qu’il faut parfois défendre la justice avec fermeté, même si cela peut blesser ou déplaire.","weights":{"Guevoura":0.8}},
+    {"text":"Je trouve de la force à maintenir l’ordre et la structure pour protéger ce qui est juste.","weights":{"Guevoura":0.8}},
+    {"text":"J’essaie d’équilibrer mes élans de bonté avec mon sens de la justice pour agir avec compassion.","weights":{"Tiferet":0.8}},
+    {"text":"Je cherche à réconcilier des points de vue divergents en trouvant un compromis équitable pour tous.","weights":{"Tiferet":0.7}},
+    {"text":"J’aime apporter de l’harmonie autour de moi en agissant avec empathie, sincérité et droiture.","weights":{"Tiferet":0.7}},
+    {"text":"Je choisis mes mots avec soin pour être clair(e) et je valorise l’honnêteté intellectuelle dans mes échanges.","weights":{"Hod":0.8}},
+    {"text":"Je reconnais facilement mes erreurs et j’exprime ma gratitude quand on m’apprend quelque chose de nouveau.","weights":{"Hod":0.7}},
+    {"text":"Je fais preuve d’humilité dans mes opinions et je structure mes idées avant de les exprimer.","weights":{"Hod":0.7}},
+    {"text":"Je persévère dans mes projets jusqu’à leur aboutissement, même si les progrès sont lents.","weights":{"Netzach":0.9}},
+    {"text":"Je puise en moi la patience et le courage nécessaires pour surmonter les obstacles.","weights":{"Netzach":0.8}},
+    {"text":"Je me sens fier(ère) lorsque je mène quelque chose à terme grâce à ma détermination constante.","weights":{"Netzach":0.7}},
+    {"text":"Je m’efforce de faire correspondre mes actions à mes paroles : l’intégrité est essentielle pour moi.","weights":{"Yesod":0.8}},
+    {"text":"Je bâtis patiemment mes projets de manière structurée plutôt que de rêver sans les réaliser.","weights":{"Yesod":0.7}},
+    {"text":"Je reste sincère et fiable en toutes circonstances, car je crois que c’est le fondement de toute relation solide.","weights":{"Yesod":0.7}},
+    {"text":"Je ressens la présence du divin dans les détails de ma vie quotidienne et je cultive un espace de paix chez moi.","weights":{"Malkhout":0.8}},
+    {"text":"J’essaie d’incarner mes idéaux spirituels dans ma vie de tous les jours, en étant humble et dévoué(e) dans mes actions.","weights":{"Malkhout":0.7}},
+    {"text":"Je trouve du sacré dans la simplicité des choses ordinaires et je rends grâce pour ce que j’ai.","weights":{"Malkhout":0.7}}
+];
 
-  <div id="resultat"></div>
+// Fonction pour mélanger les questions
+function shuffle(array) {
+    for (var i = array.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+    }
+}
 
-  <script>
-    const descriptions = {
-      "Binah": "La compréhension profonde, la sagesse silencieuse. Tu portes en toi la faculté d’analyser, de structurer et d’éclairer les autres.",
-      "Chokhmah": "L’intuition divine et le jaillissement d’idées pures. Tu es un canal d’inspiration.",
-      "Daat": "La conscience intérieure et la synthèse des forces. Tu es l’union entre la pensée et l’action.",
-      "Chesed": "L’amour inconditionnel, la bonté rayonnante. Tu donnes sans compter.",
-      "Gevurah": "La force, la rigueur et la justice. Tu protèges et structures ce qui t’entoure.",
-      "Tiferet": "L’équilibre, la beauté et la compassion. Tu harmonises les contraires.",
-      "Netzach": "La persévérance et la victoire. Tu poursuis ta mission avec passion.",
-      "Hod": "L’humilité, la sincérité et l’élégance de l’âme. Tu sais reconnaître le mystère.",
-      "Yesod": "Le lien, le fondement, la stabilité intérieure. Tu es un pilier pour les autres.",
-      "Malkhut": "La royauté, la réalisation concrète. Tu es fait pour incarner le spirituel dans la matière."
+// Construction du questionnaire
+function buildQuiz() {
+    shuffle(questions);
+    var container = document.getElementById("quiz-container");
+    // Légende de l'échelle (page 1 seulement)
+    var legend = document.createElement("p");
+    legend.className = "legend";
+    legend.textContent = "Rouge foncé = Totalement en désaccord (-2), Rouge clair = Plutôt pas d’accord (-1), Gris = Neutre (0), Vert clair = Plutôt d’accord (+1), Vert foncé = Totalement d’accord (+2).";
+    container.appendChild(legend);
+    var qIndex = 1;
+    for (var p = 1; p <= 5; p++) {
+        var pageDiv = document.createElement("div");
+        pageDiv.className = "page";
+        pageDiv.id = "page-" + p;
+        // Questions par page
+        for (var k = 0; k < 6; k++) {
+            var q = questions[(p-1)*6 + k];
+            if (!q) break;
+            var qDiv = document.createElement("div");
+            qDiv.className = "question";
+            var pQ = document.createElement("p");
+            pQ.textContent = qIndex + ". " + q.text;
+            qDiv.appendChild(pQ);
+            // Options
+            var optDiv = document.createElement("div");
+            optDiv.className = "options";
+            var values = [
+                {val:-2, cls:"dark-red", label:"Totalement en désaccord"},
+                {val:-1, cls:"light-red", label:"Plutôt pas d’accord"},
+                {val:0, cls:"neutral", label:"Neutre"},
+                {val:1, cls:"light-green", label:"Plutôt d’accord"},
+                {val:2, cls:"dark-green", label:"Totalement d’accord"}
+            ];
+            for (var i = 0; i < values.length; i++) {
+                var lbl = document.createElement("label");
+                var radio = document.createElement("input");
+                radio.type = "radio";
+                radio.name = "q" + qIndex;
+                radio.value = values[i].val;
+                var span = document.createElement("span");
+                span.className = "circle " + values[i].cls;
+                span.title = values[i].label;
+                lbl.appendChild(radio);
+                lbl.appendChild(span);
+                optDiv.appendChild(lbl);
+            }
+            qDiv.appendChild(optDiv);
+            pageDiv.appendChild(qDiv);
+            qIndex++;
+        }
+        // Navigation
+        var navDiv = document.createElement("div");
+        navDiv.className = "navigation";
+        if (p > 1) {
+            var prevBtn = document.createElement("button");
+            prevBtn.textContent = "Page précédente";
+            prevBtn.onclick = prevPage;
+            navDiv.appendChild(prevBtn);
+        }
+        if (p < 5) {
+            var nextBtn = document.createElement("button");
+            nextBtn.textContent = "Page suivante";
+            nextBtn.onclick = nextPage;
+            navDiv.appendChild(nextBtn);
+        }
+        if (p == 5) {
+            var analyseBtn = document.createElement("button");
+            analyseBtn.textContent = "Analyser";
+            analyseBtn.onclick = analyse;
+            navDiv.appendChild(analyseBtn);
+        }
+        pageDiv.appendChild(navDiv);
+        container.appendChild(pageDiv);
+    }
+    // Afficher la première page
+    showPage(1);
+}
+
+// Affichage des pages
+var currentPage = 1;
+function showPage(n) {
+    var pages = document.getElementsByClassName("page");
+    for (var i = 0; i < pages.length; i++) {
+        pages[i].classList.remove("active");
+    }
+    var page = document.getElementById("page-" + n);
+    if (page) {
+        page.classList.add("active");
+        currentPage = n;
+    }
+}
+
+// Changer de page
+function nextPage() { showPage(currentPage + 1); }
+function prevPage() { showPage(currentPage - 1); }
+
+// Calcul et analyse des résultats
+function analyse() {
+    var sephirot = {
+        "Daat": 0, "Hokhmah": 0, "Binah": 0,
+        "Hessed": 0, "Guevoura": 0, "Tiferet": 0,
+        "Hod": 0, "Netzach": 0, "Yesod": 0, "Malkhout": 0
     };
-
-    document.getElementById("sephirot-form").addEventListener("submit", async function(e) {
-      e.preventDefault();
-      const birth_date = document.getElementById("birth_date").value;
-      const birth_time = document.getElementById("birth_time").value;
-
-      const res = await fetch("https://kabal-blackend.onrender.com/sephirot", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ birth_date, birth_time })
-      });
-
-      const data = await res.json();
-      const container = document.getElementById("resultat");
-      if (data.error) {
-        container.innerHTML = `<p style='color: red;'>Erreur : ${data.error}</p>`;
-      } else {
-        const desc = descriptions[data.dominante] || "Une lumière intérieure unique te guide.";
-        const second = data.secondaires?.length ? `<div class="secondaires">Soutiens : ${data.secondaires.join(", ")}</div>` : "";
-
-        container.innerHTML = `
-  <div class="card-resultat">
-    <h2>🔮 Ta Séphira dominante : ${data.dominante}</h2>
-    <p>${desc}</p>
-    ${second}
-    <div style="margin-top: 20px;">
-      <a href="${data.dominante.toLowerCase()}.html" style="
-        display: inline-block;
-        margin-top: 10px;
-        background-color: #d4af37;
-        color: white;
-        padding: 10px 20px;
-        border-radius: 6px;
-        text-decoration: none;
-        font-weight: bold;
-        box-shadow: 0 0 8px rgba(212,175,55,0.3);
-      ">
-        👉 En savoir plus
-      </a>
-    </div>
-  </div>
-`;
-
-      }
+    // Parcourir les réponses
+    for (var i = 1; i <= questions.length; i++) {
+        var radios = document.getElementsByName("q" + i);
+        var val = null;
+        for (var r = 0; r < radios.length; r++) {
+            if (radios[r].checked) {
+                val = parseInt(radios[r].value);
+                break;
+            }
+        }
+        if (val === null) {
+            val = 0; // si non répondu, on considère neutre
+        }
+        // Ajouter pondérations
+        var weights = questions[i-1].weights;
+        for (var s in weights) {
+            if (weights.hasOwnProperty(s)) {
+                sephirot[s] += weights[s] * val;
+            }
+        }
+    }
+    // Trier par score décroissant
+    var sorted = Object.keys(sephirot).sort(function(a, b) {
+        return sephirot[b] - sephirot[a];
     });
-  </script>
+    // Afficher résultats
+    var resultText = "Séphira dominante : " + sorted[0] +
+                     " ; suivantes : " + sorted[1] + " et " + sorted[2] + ".";
+    alert(resultText);
+}
+
+document.addEventListener("DOMContentLoaded", buildQuiz);
+</script>
+
+
+
 </body>
 </html>
-feat: ajout lien dynamique vers les pages Séphirot
+
