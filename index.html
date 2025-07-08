@@ -558,7 +558,12 @@
 </style>
 
 </head>
-
+<body>
+  <div class="container">
+    <div id="progress-text"></div>
+    <div class="progress-bar"><div id="progress-fill" class="progress-fill"></div></div>
+    <div id="questions-container"></div>
+  </div>
 
   <script>
     const questions = [
@@ -670,7 +675,8 @@ function updateProgress() {
   if (analyzeBtn) analyzeBtn.disabled = answered < total;
 }
 
-
+<script>
+    buildQuiz(); // ⚠️ Très important
     </script>
   </body>
 </html>
