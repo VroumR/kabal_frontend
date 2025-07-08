@@ -549,10 +549,11 @@
         font-size: 1.2rem;
       }
     }
-<style>
-  /* ... tout ton CSS ... */
+
   .options.horizontal { display: flex; gap: 10px; flex-wrap: wrap; }
   .option-label-horizontal { display: flex; flex-direction: column; align-items: center; width: 110px; font-size: 0.8rem; text-align: center; }
+
+
 </style>
 
 </head>
@@ -628,7 +629,8 @@
     <input type="radio" name="q${index}" value="-2" onchange="updateProgress()">
     <div class="circle dark-red"></div>
     <span>Extrêmement pas d’accord</span>
-  </label>
+  </label> 
+
   <label class="option-label-horizontal">
     <input type="radio" name="q${index}" value="-1" onchange="updateProgress()">
     <div class="circle light-red"></div>
@@ -650,5 +652,20 @@
     <span>Extrêmement d’accord</span>
   </label>
 </div>
+function updateProgress() {
+  const total = questions.length;
+  const answered = Array.from(document.querySelectorAll('input[type="radio"]:checked')).length;
+  document.getElementById("progress-text").textContent = `${answered}/${total} questions répondues`;
+
+  const percentage = (answered / total) * 100;
+  document.getElementById("progress-fill").style.width = `${percentage}%`;
+
+  const analyzeBtn = document.getElementById("analyze-btn");
+  analyzeBtn.disabled = answered < total;
+}
+
+    </script>
+  </body>
+</html>
 
  
