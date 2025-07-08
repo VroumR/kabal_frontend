@@ -641,7 +641,6 @@
 function buildQuiz() {
   const container = document.getElementById("questions-container");
 container.innerHTML = ""; // ✅ empêche la duplication si appelé plusieurs fois
-  
   questions.forEach((question, index) => {
     const questionDiv = document.createElement("div");
     questionDiv.className = "question";
