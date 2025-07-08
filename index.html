@@ -699,6 +699,39 @@ function updateProgress() {
 
 
     buildQuiz(); // ⚠️ Très important
+
+    <script>
+function analyzeResult() {
+  const scores = {};
+
+  // Calcule des scores pour chaque Séphira en fonction des réponses
+  questions.forEach((question, index) => {
+    const selected = document.querySelector(`input[name="q${index}"]:checked`);
+    if (selected) {
+      const value = parseInt(selected.value);
+      for (const [sephira, weight] of Object.entries(question.weights)) {
+        if (!scores[sephira]) scores[sephira] = 0;
+        scores[sephira] += value * weight;
+      }
+    }
+  });
+
+  // Trie les Séphirot par score décroissant
+  const sorted = Object.entries(scores).sort((a, b) => b[1] - a[1]);
+
+  // Récupère la dominante et la secondaire
+  const bestSephira = sorted[0]?.[0];
+  const secondSephira = sorted[1]?.[0];
+
+  // Récupère leurs descriptions
+  const bestDescription = sephirotDescriptions[bestSephira] || "Pas de description.";
+  const secondDescription = sephirotDescriptions[secondSephira] || "Pas de description.";
+
+  // Affiche le résultat
+  alert(`✨ Ta Séphira dominante est : ${bestSephira}\n${bestDescription}\n\n🌟 Ta Séphira secondaire est : ${secondSephira}\n${secondDescription}`);
+}
+</script>
+
     </script>
   </body>
 </html>
