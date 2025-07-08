@@ -699,10 +699,7 @@ function updateProgress() {
 }
 
 
- window.addEventListener("DOMContentLoaded", () => {
-  buildQuiz(); // ✅ Construit le quiz après que la page soit chargée
-  document.getElementById("analyze-btn").addEventListener("click", analyzeResult);
-});
+
 
    
 function analyzeResult() {
@@ -734,7 +731,10 @@ function analyzeResult() {
   // Affiche le résultat
   alert(`✨ Ta Séphira dominante est : ${bestSephira}\n${bestDescription}\n\n🌟 Ta Séphira secondaire est : ${secondSephira}\n${secondDescription}`);
 }
-
+ window.addEventListener("DOMContentLoaded", () => {
+  buildQuiz(); // ✅ Construit le quiz après que la page soit chargée
+  document.getElementById("analyze-btn").addEventListener("click", analyzeResult);
+});
 
     </script>
   </body>
