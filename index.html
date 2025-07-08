@@ -1,6 +1,170 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KABAL – Trouve ta Séphira</title>
+  <link href="https://fonts.googleapis.com/css?family=Cormorant+Garamond&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Cormorant Garamond', serif;
+      background-color: #ffffff;
+      color: #333333;
+      margin: 0;
+      padding: 0;
+    }
+    #quiz-container {
+      max-width: 800px;
+      margin: auto;
+      padding: 20px;
+    }
+    header {
+      text-align: center;
+      padding: 20px;
+    }
+    header img {
+      width: 100px;
+      margin-bottom: 10px;
+    }
+    h1 {
+      color: #FFD700;
+      margin-bottom: 0.5em;
+    }
+    .legend {
+      font-size: 0.9em;
+      margin-bottom: 1em;
+      text-align: center;
+      color: #555555;
+    }
+    .page { display: none; }
+    .page.active { display: block; }
+    .question { margin-bottom: 1.5em; }
+    .question p {
+      font-size: 1.1em;
+      margin-bottom: 0.5em;
+    }
+    .options {
+      display: flex;
+      justify-content: space-between;
+      max-width: 400px;
+      margin: 0.5em auto;
+    }
+    label {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+      font-size: 0.9em;
+      color: #555;
+    }
+    input[type="radio"] { display: none; }
+    .circle {
+      display: inline-block;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      margin-bottom: 0.3em;
+      border: 2px solid #888;
+    }
+    .dark-red { background-color: #C51C1C; border-color: #800000; }
+    .light-red { background-color: #F08080; border-color: #D2691E; }
+    .neutral   { background-color: #CCCCCC; border-color: #888888; }
+    .light-green { background-color: #90EE90; border-color: #228B22; }
+    .dark-green { background-color: #006400; border-color: #004d00; }
+    button {
+      background-color: #FFD700;
+      border: none;
+      color: white;
+      padding: 10px 20px;
+      margin: 10px 5px;
+      font-size: 1em;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    .navigation {
+      text-align: center;
+      margin-top: 20px;
+    }
+    .dob-container {
+      text-align: center;
+      margin: 20px 0;
+    }
+    .dob-container label {
+      font-weight: bold;
+      display: block;
+      margin-bottom: 8px;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <img src="logo-kabal.png" alt="KABAL logo" />
+    <h1>Trouve ta Séphira dominante</h1>
+  </header>
+
+  <div class="dob-container">
+    <label for="dob">📅 Ta date de naissance :</label>
+    <input type="date" id="dob" />
+  </div>
+
+  <div id="quiz-container"></div>
+
+  <script>
+    const questions = /* place ici tes questions JSON comme dans ton script actuel (inchangées) */;
+    // ... même logique que ta fonction actuelle (shuffle, analyse, etc.)
+
+    // Lors du calcul des résultats :
+    function analyse() {
+      const dob = document.getElementById("dob").value;
+      const birthMonth = dob ? new Date(dob).getMonth() + 1 : null;
+
+      const hebrewMonthToSephira = {
+        1: "Netzach", 2: "Hod", 3: "Tiferet",
+        4: "Guevoura", 5: "Hod", 6: "Yesod",
+        7: "Malkhout", 8: "Binah", 9: "Hokhmah",
+        10: "Guevoura", 11: "Hessed", 12: "Tiferet"
+      };
+
+      const sephirot = {
+        "Daat": 0, "Hokhmah": 0, "Binah": 0,
+        "Hessed": 0, "Guevoura": 0, "Tiferet": 0,
+        "Hod": 0, "Netzach": 0, "Yesod": 0, "Malkhout": 0
+      };
+
+      for (let i = 1; i <= questions.length; i++) {
+        const radios = document.getElementsByName("q" + i);
+        let val = 0;
+        for (const r of radios) if (r.checked) val = parseInt(r.value);
+        const weights = questions[i - 1].weights;
+        for (const s in weights) {
+          sephirot[s] += weights[s] * val;
+        }
+      }
+
+      // Ajout du bonus date de naissance
+      if (birthMonth && hebrewMonthToSephira[birthMonth]) {
+        const bonusSefira = hebrewMonthToSephira[birthMonth];
+        sephirot[bonusSefira] += 2; // pondération fixe
+      }
+
+      const sorted = Object.keys(sephirot).sort((a, b) => sephirot[b] - sephirot[a]);
+
+      alert("🔮 Ta Séphira dominante : " + sorted[0] +
+            "\nSuivantes : " + sorted[1] + " et " + sorted[2]);
+    }
+
+    // Appelle ta fonction buildQuiz() ici comme avant
+  </script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Questionnaire Psychospirituel par Séphira</title>
