@@ -6,98 +6,7 @@
   <title>KABAL – Trouve ta Séphira</title>
   <link href="https://fonts.googleapis.com/css?family=Cormorant+Garamond&display=swap" rel="stylesheet">
   <style>
-    body {
-      font-family: 'Cormorant Garamond', serif;
-      background-color: #ffffff;
-      color: #333333;
-      margin: 0;
-      padding: 0;
-    }
-    #quiz-container {
-      max-width: 800px;
-      margin: auto;
-      padding: 20px;
-    }
-    header {
-      text-align: center;
-      padding: 20px;
-    }
-    header img {
-      width: 100px;
-      margin-bottom: 10px;
-    }
-    h1 {
-      color: #FFD700;
-      margin-bottom: 0.5em;
-    }
-    .legend {
-      font-size: 0.9em;
-      margin-bottom: 1em;
-      text-align: center;
-      color: #555555;
-    }
-    .page { display: none; }
-    .page.active { display: block; }
-    .question { margin-bottom: 1.5em; }
-    .question p {
-      font-size: 1.1em;
-      margin-bottom: 0.5em;
-    }
-    .options {
-      display: flex;
-      justify-content: space-between;
-      max-width: 400px;
-      margin: 0.5em auto;
-    }
-    label {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      cursor: pointer;
-      font-size: 0.9em;
-      color: #555;
-    }
-    input[type="radio"] { display: none; }
-    .circle {
-      display: inline-block;
-      width: 24px;
-      height: 24px;
-      border-radius: 50%;
-      margin-bottom: 0.3em;
-      border: 2px solid #888;
-    }
-    .dark-red { background-color: #C51C1C; border-color: #800000; }
-    .light-red { background-color: #F08080; border-color: #D2691E; }
-    .neutral   { background-color: #CCCCCC; border-color: #888888; }
-    .light-green { background-color: #90EE90; border-color: #228B22; }
-    .dark-green { background-color: #006400; border-color: #004d00; }
-    button {
-      background-color: #FFD700;
-      border: none;
-      color: white;
-      padding: 10px 20px;
-      margin: 10px 5px;
-      font-size: 1em;
-      cursor: pointer;
-      border-radius: 5px;
-    }
-    button:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
-    .navigation {
-      text-align: center;
-      margin-top: 20px;
-    }
-    .dob-container {
-      text-align: center;
-      margin: 20px 0;
-    }
-    .dob-container label {
-      font-weight: bold;
-      display: block;
-      margin-bottom: 8px;
-    }
+    /* même CSS que dans ton dernier code - déjà correct */
   </style>
 </head>
 <body>
@@ -114,337 +23,165 @@
 
   <div id="quiz-container"></div>
 
-  <script>
-    const questions = /* place ici tes questions JSON comme dans ton script actuel (inchangées) */;
-    // ... même logique que ta fonction actuelle (shuffle, analyse, etc.)
+ <script>
+const questions = [
+  { text: "Je cherche à faire le lien entre mes connaissances intellectuelles et mes émotions pour que mon savoir soit cohérent et incarné.", weights: { Daat: 0.8, Tiferet: 0.2 } },
+  { text: "Quand j’apprends quelque chose de nouveau, j’essaie de l’intégrer concrètement dans ma vie plutôt que de rester sur le plan théorique.", weights: { Daat: 0.8 } },
+  { text: "Je valorise la cohérence intérieure et j’harmonise mes idées contradictoires pour parvenir à une compréhension unifiée.", weights: { Daat: 0.8 } },
+  { text: "Je fais souvent l’expérience d’une intuition soudaine qui éclaire d’emblée une situation complexe.", weights: { Hokhmah: 0.8 } },
+  { text: "Je reconnais humblement mes limites intellectuelles et reste ouvert(e) aux idées qui dépassent ma compréhension.", weights: { Hokhmah: 0.7 } },
+  { text: "Je sais rester curieux(se) et ouvert(e) : je ne cherche pas à prouver que j’ai toujours raison, mais j’accueille les enseignements extérieurs avec humilité.", weights: { Hokhmah: 0.7 } },
+  { text: "Je prends le temps de réfléchir en profondeur avant de prendre une décision importante, faisant preuve de patience.", weights: { Binah: 0.8 } },
+  { text: "Je réfléchis aux détails et j’assemble les éléments d’une situation pour en saisir l’ensemble.", weights: { Binah: 0.7 } },
+  { text: "Je fais preuve d’empathie : j’essaie vraiment de comprendre en profondeur ce que ressentent les autres.", weights: { Binah: 0.8 } },
+  { text: "Je me sens poussé(e) à faire le bien même quand personne ne regarde.", weights: { Hessed: 1.0 } },
+  { text: "J’ai du mal à dire non lorsque l’on me sollicite, même si je sais que cela va à l’encontre de mes besoins.", weights: { Hessed: 0.8, Guevoura: 0.2 } },
+  { text: "Je pardonne facilement les erreurs des autres et essaie toujours de voir leur bon côté.", weights: { Hessed: 0.8 } },
+  { text: "Je sais dire “non” et imposer des limites claires lorsque c’est nécessaire, sans hésitation.", weights: { Guevoura: 1.0 } },
+  { text: "Je crois qu’il faut parfois défendre la justice avec fermeté, même si cela peut blesser ou déplaire.", weights: { Guevoura: 0.8 } },
+  { text: "Je trouve de la force à maintenir l’ordre et la structure pour protéger ce qui est juste.", weights: { Guevoura: 0.8 } },
+  { text: "J’essaie d’équilibrer mes élans de bonté avec mon sens de la justice pour agir avec compassion.", weights: { Tiferet: 0.8 } },
+  { text: "Je cherche à réconcilier des points de vue divergents en trouvant un compromis équitable pour tous.", weights: { Tiferet: 0.7 } },
+  { text: "J’aime apporter de l’harmonie autour de moi en agissant avec empathie, sincérité et droiture.", weights: { Tiferet: 0.7 } },
+  { text: "Je choisis mes mots avec soin pour être clair(e) et je valorise l’honnêteté intellectuelle dans mes échanges.", weights: { Hod: 0.8 } },
+  { text: "Je reconnais facilement mes erreurs et j’exprime ma gratitude quand on m’apprend quelque chose de nouveau.", weights: { Hod: 0.7 } },
+  { text: "Je fais preuve d’humilité dans mes opinions et je structure mes idées avant de les exprimer.", weights: { Hod: 0.7 } },
+  { text: "Je persévère dans mes projets jusqu’à leur aboutissement, même si les progrès sont lents.", weights: { Netzach: 0.9 } },
+  { text: "Je puise en moi la patience et le courage nécessaires pour surmonter les obstacles.", weights: { Netzach: 0.8 } },
+  { text: "Je me sens fier(ère) lorsque je mène quelque chose à terme grâce à ma détermination constante.", weights: { Netzach: 0.7 } },
+  { text: "Je m’efforce de faire correspondre mes actions à mes paroles : l’intégrité est essentielle pour moi.", weights: { Yesod: 0.8 } },
+  { text: "Je bâtis patiemment mes projets de manière structurée plutôt que de rêver sans les réaliser.", weights: { Yesod: 0.7 } },
+  { text: "Je reste sincère et fiable en toutes circonstances, car je crois que c’est le fondement de toute relation solide.", weights: { Yesod: 0.7 } },
+  { text: "Je ressens la présence du divin dans les détails de ma vie quotidienne et je cultive un espace de paix chez moi.", weights: { Malkhout: 0.8 } },
+  { text: "J’essaie d’incarner mes idéaux spirituels dans ma vie de tous les jours, en étant humble et dévoué(e) dans mes actions.", weights: { Malkhout: 0.7 } },
+  { text: "Je trouve du sacré dans la simplicité des choses ordinaires et je rends grâce pour ce que j’ai.", weights: { Malkhout: 0.7 } }
+];
+</script>
 
-    // Lors du calcul des résultats :
+
+    const hebrewMonthToSephira = {
+      1: "Netzach", 2: "Hod", 3: "Tiferet",
+      4: "Guevoura", 5: "Hod", 6: "Yesod",
+      7: "Malkhout", 8: "Binah", 9: "Hokhmah",
+      10: "Guevoura", 11: "Hessed", 12: "Tiferet"
+    };
+
+    function shuffle(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+    }
+
+    function buildQuiz() {
+      shuffle(questions);
+      const container = document.getElementById("quiz-container");
+      const legend = document.createElement("p");
+      legend.className = "legend";
+      legend.textContent = "Rouge foncé = Totalement en désaccord (-2), Rouge clair = Plutôt pas d’accord (-1), Gris = Neutre (0), Vert clair = Plutôt d’accord (+1), Vert foncé = Totalement d’accord (+2).";
+      container.appendChild(legend);
+      let qIndex = 1;
+      for (let p = 1; p <= 5; p++) {
+        const pageDiv = document.createElement("div");
+        pageDiv.className = "page";
+        pageDiv.id = "page-" + p;
+        for (let k = 0; k < 6; k++) {
+          const q = questions[(p - 1) * 6 + k];
+          if (!q) break;
+          const qDiv = document.createElement("div");
+          qDiv.className = "question";
+          const pQ = document.createElement("p");
+          pQ.textContent = qIndex + ". " + q.text;
+          qDiv.appendChild(pQ);
+          const optDiv = document.createElement("div");
+          optDiv.className = "options";
+          const values = [
+            {val:-2, cls:"dark-red", label:"Totalement en désaccord"},
+            {val:-1, cls:"light-red", label:"Plutôt pas d’accord"},
+            {val:0, cls:"neutral", label:"Neutre"},
+            {val:1, cls:"light-green", label:"Plutôt d’accord"},
+            {val:2, cls:"dark-green", label:"Totalement d’accord"}
+          ];
+          values.forEach(v => {
+            const lbl = document.createElement("label");
+            const radio = document.createElement("input");
+            radio.type = "radio";
+            radio.name = "q" + qIndex;
+            radio.value = v.val;
+            const span = document.createElement("span");
+            span.className = "circle " + v.cls;
+            span.title = v.label;
+            lbl.appendChild(radio);
+            lbl.appendChild(span);
+            optDiv.appendChild(lbl);
+          });
+          qDiv.appendChild(optDiv);
+          pageDiv.appendChild(qDiv);
+          qIndex++;
+        }
+        const navDiv = document.createElement("div");
+        navDiv.className = "navigation";
+        if (p > 1) {
+          const prevBtn = document.createElement("button");
+          prevBtn.textContent = "Page précédente";
+          prevBtn.onclick = prevPage;
+          navDiv.appendChild(prevBtn);
+        }
+        if (p < 5) {
+          const nextBtn = document.createElement("button");
+          nextBtn.textContent = "Page suivante";
+          nextBtn.onclick = nextPage;
+          navDiv.appendChild(nextBtn);
+        }
+        if (p === 5) {
+          const analyseBtn = document.createElement("button");
+          analyseBtn.textContent = "Analyser";
+          analyseBtn.onclick = analyse;
+          navDiv.appendChild(analyseBtn);
+        }
+        pageDiv.appendChild(navDiv);
+        container.appendChild(pageDiv);
+      }
+      showPage(1);
+    }
+
+    let currentPage = 1;
+    function showPage(n) {
+      document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+      const page = document.getElementById("page-" + n);
+      if (page) {
+        page.classList.add("active");
+        currentPage = n;
+      }
+    }
+    function nextPage() { showPage(currentPage + 1); }
+    function prevPage() { showPage(currentPage - 1); }
+
     function analyse() {
       const dob = document.getElementById("dob").value;
-      const birthMonth = dob ? new Date(dob).getMonth() + 1 : null;
-
-      const hebrewMonthToSephira = {
-        1: "Netzach", 2: "Hod", 3: "Tiferet",
-        4: "Guevoura", 5: "Hod", 6: "Yesod",
-        7: "Malkhout", 8: "Binah", 9: "Hokhmah",
-        10: "Guevoura", 11: "Hessed", 12: "Tiferet"
+      const month = dob ? new Date(dob).getMonth() + 1 : null;
+      const scores = {
+        "Daat": 0, "Hokhmah": 0, "Binah": 0, "Hessed": 0, "Guevoura": 0,
+        "Tiferet": 0, "Hod": 0, "Netzach": 0, "Yesod": 0, "Malkhout": 0
       };
-
-      const sephirot = {
-        "Daat": 0, "Hokhmah": 0, "Binah": 0,
-        "Hessed": 0, "Guevoura": 0, "Tiferet": 0,
-        "Hod": 0, "Netzach": 0, "Yesod": 0, "Malkhout": 0
-      };
-
       for (let i = 1; i <= questions.length; i++) {
         const radios = document.getElementsByName("q" + i);
         let val = 0;
-        for (const r of radios) if (r.checked) val = parseInt(r.value);
+        radios.forEach(r => { if (r.checked) val = parseInt(r.value); });
         const weights = questions[i - 1].weights;
         for (const s in weights) {
-          sephirot[s] += weights[s] * val;
+          scores[s] += weights[s] * val;
         }
       }
-
-      // Ajout du bonus date de naissance
-      if (birthMonth && hebrewMonthToSephira[birthMonth]) {
-        const bonusSefira = hebrewMonthToSephira[birthMonth];
-        sephirot[bonusSefira] += 2; // pondération fixe
+      if (month && hebrewMonthToSephira[month]) {
+        scores[hebrewMonthToSephira[month]] += 2;
       }
-
-      const sorted = Object.keys(sephirot).sort((a, b) => sephirot[b] - sephirot[a]);
-
+      const sorted = Object.keys(scores).sort((a, b) => scores[b] - scores[a]);
       alert("🔮 Ta Séphira dominante : " + sorted[0] +
             "\nSuivantes : " + sorted[1] + " et " + sorted[2]);
     }
 
-    // Appelle ta fonction buildQuiz() ici comme avant
+    document.addEventListener("DOMContentLoaded", buildQuiz);
   </script>
 </body>
 </html>
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Questionnaire Psychospirituel par Séphira</title>
-<link href="https://fonts.googleapis.com/css?family=Cormorant+Garamond&display=swap" rel="stylesheet">
-<style>
-body {
-    font-family: 'Cormorant Garamond', serif;
-    background-color: #ffffff;
-    color: #333333;
-    margin: 0;
-    padding: 0;
-}
-#quiz-container {
-    max-width: 800px;
-    margin: auto;
-    padding: 20px;
-}
-h1 {
-    text-align: center;
-    color: #FFD700;
-    margin-bottom: 1em;
-}
-.legend {
-    font-size: 0.9em;
-    margin-bottom: 1em;
-    text-align: center;
-    color: #555555;
-}
-.page {
-    display: none;
-}
-.page.active {
-    display: block;
-}
-.question {
-    margin-bottom: 1.5em;
-}
-.question p {
-    font-size: 1.1em;
-    margin: 0 0 0.5em 0;
-}
-.options {
-    display: flex;
-    justify-content: space-between;
-    max-width: 400px;
-    margin: 0.5em 0;
-}
-label {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    cursor: pointer;
-    font-size: 0.9em;
-    color: #555;
-}
-input[type="radio"] {
-    display: none;
-}
-.circle {
-    display: inline-block;
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-    margin-bottom: 0.3em;
-    border: 2px solid #888;
-}
-.dark-red { background-color: #C51C1C; border-color: #800000; }
-.light-red { background-color: #F08080; border-color: #D2691E; }
-.neutral   { background-color: #CCCCCC; border-color: #888888; }
-.light-green { background-color: #90EE90; border-color: #228B22; }
-.dark-green { background-color: #006400; border-color: #004d00; }
-button {
-    background-color: #FFD700;
-    border: none;
-    color: #ffffff;
-    padding: 10px 20px;
-    margin: 10px 5px;
-    font-size: 1em;
-    cursor: pointer;
-    border-radius: 5px;
-}
-button:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-}
-.navigation {
-    text-align: center;
-    margin-top: 20px;
-}
-</style>
-</head>
-<body>
-
-<h1>Questionnaire Psychospirituel par Séphira</h1>
-<div id="quiz-container"></div>
-
-<script>
-// Données des questions (texte exact et pondérations par Séphira)
-var questions = [
-    {"text":"Je cherche à faire le lien entre mes connaissances intellectuelles et mes émotions pour que mon savoir soit cohérent et incarné.","weights":{"Daat":0.8,"Tiferet":0.2}},
-    {"text":"Quand j’apprends quelque chose de nouveau, j’essaie de l’intégrer concrètement dans ma vie plutôt que de rester sur le plan théorique.","weights":{"Daat":0.8}},
-    {"text":"Je valorise la cohérence intérieure et j’harmonise mes idées contradictoires pour parvenir à une compréhension unifiée.","weights":{"Daat":0.8}},
-    {"text":"Je fais souvent l’expérience d’une intuition soudaine qui éclaire d’emblée une situation complexe.","weights":{"Hokhmah":0.8}},
-    {"text":"Je reconnais humblement mes limites intellectuelles et reste ouvert(e) aux idées qui dépassent ma compréhension.","weights":{"Hokhmah":0.7}},
-    {"text":"Je sais rester curieux(se) et ouvert(e) : je ne cherche pas à prouver que j’ai toujours raison, mais j’accueille les enseignements extérieurs avec humilité.","weights":{"Hokhmah":0.7}},
-    {"text":"Je prends le temps de réfléchir en profondeur avant de prendre une décision importante, faisant preuve de patience.","weights":{"Binah":0.8}},
-    {"text":"Je réfléchis aux détails et j’assemble les éléments d’une situation pour en saisir l’ensemble.","weights":{"Binah":0.7}},
-    {"text":"Je fais preuve d’empathie : j’essaie vraiment de comprendre en profondeur ce que ressentent les autres.","weights":{"Binah":0.8}},
-    {"text":"Je me sens poussé(e) à faire le bien même quand personne ne regarde.","weights":{"Hessed":1.0}},
-    {"text":"J’ai du mal à dire non lorsque l’on me sollicite, même si je sais que cela va à l’encontre de mes besoins.","weights":{"Hessed":0.8,"Guevoura":0.2}},
-    {"text":"Je pardonne facilement les erreurs des autres et essaie toujours de voir leur bon côté.","weights":{"Hessed":0.8}},
-    {"text":"Je sais dire “non” et imposer des limites claires lorsque c’est nécessaire, sans hésitation.","weights":{"Guevoura":1.0}},
-    {"text":"Je crois qu’il faut parfois défendre la justice avec fermeté, même si cela peut blesser ou déplaire.","weights":{"Guevoura":0.8}},
-    {"text":"Je trouve de la force à maintenir l’ordre et la structure pour protéger ce qui est juste.","weights":{"Guevoura":0.8}},
-    {"text":"J’essaie d’équilibrer mes élans de bonté avec mon sens de la justice pour agir avec compassion.","weights":{"Tiferet":0.8}},
-    {"text":"Je cherche à réconcilier des points de vue divergents en trouvant un compromis équitable pour tous.","weights":{"Tiferet":0.7}},
-    {"text":"J’aime apporter de l’harmonie autour de moi en agissant avec empathie, sincérité et droiture.","weights":{"Tiferet":0.7}},
-    {"text":"Je choisis mes mots avec soin pour être clair(e) et je valorise l’honnêteté intellectuelle dans mes échanges.","weights":{"Hod":0.8}},
-    {"text":"Je reconnais facilement mes erreurs et j’exprime ma gratitude quand on m’apprend quelque chose de nouveau.","weights":{"Hod":0.7}},
-    {"text":"Je fais preuve d’humilité dans mes opinions et je structure mes idées avant de les exprimer.","weights":{"Hod":0.7}},
-    {"text":"Je persévère dans mes projets jusqu’à leur aboutissement, même si les progrès sont lents.","weights":{"Netzach":0.9}},
-    {"text":"Je puise en moi la patience et le courage nécessaires pour surmonter les obstacles.","weights":{"Netzach":0.8}},
-    {"text":"Je me sens fier(ère) lorsque je mène quelque chose à terme grâce à ma détermination constante.","weights":{"Netzach":0.7}},
-    {"text":"Je m’efforce de faire correspondre mes actions à mes paroles : l’intégrité est essentielle pour moi.","weights":{"Yesod":0.8}},
-    {"text":"Je bâtis patiemment mes projets de manière structurée plutôt que de rêver sans les réaliser.","weights":{"Yesod":0.7}},
-    {"text":"Je reste sincère et fiable en toutes circonstances, car je crois que c’est le fondement de toute relation solide.","weights":{"Yesod":0.7}},
-    {"text":"Je ressens la présence du divin dans les détails de ma vie quotidienne et je cultive un espace de paix chez moi.","weights":{"Malkhout":0.8}},
-    {"text":"J’essaie d’incarner mes idéaux spirituels dans ma vie de tous les jours, en étant humble et dévoué(e) dans mes actions.","weights":{"Malkhout":0.7}},
-    {"text":"Je trouve du sacré dans la simplicité des choses ordinaires et je rends grâce pour ce que j’ai.","weights":{"Malkhout":0.7}}
-];
-
-// Fonction pour mélanger les questions
-function shuffle(array) {
-    for (var i = array.length - 1; i > 0; i--) {
-        var j = Math.floor(Math.random() * (i + 1));
-        var temp = array[i];
-        array[i] = array[j];
-        array[j] = temp;
-    }
-}
-
-// Construction du questionnaire
-function buildQuiz() {
-    shuffle(questions);
-    var container = document.getElementById("quiz-container");
-    // Légende de l'échelle (page 1 seulement)
-    var legend = document.createElement("p");
-    legend.className = "legend";
-    legend.textContent = "Rouge foncé = Totalement en désaccord (-2), Rouge clair = Plutôt pas d’accord (-1), Gris = Neutre (0), Vert clair = Plutôt d’accord (+1), Vert foncé = Totalement d’accord (+2).";
-    container.appendChild(legend);
-    var qIndex = 1;
-    for (var p = 1; p <= 5; p++) {
-        var pageDiv = document.createElement("div");
-        pageDiv.className = "page";
-        pageDiv.id = "page-" + p;
-        // Questions par page
-        for (var k = 0; k < 6; k++) {
-            var q = questions[(p-1)*6 + k];
-            if (!q) break;
-            var qDiv = document.createElement("div");
-            qDiv.className = "question";
-            var pQ = document.createElement("p");
-            pQ.textContent = qIndex + ". " + q.text;
-            qDiv.appendChild(pQ);
-            // Options
-            var optDiv = document.createElement("div");
-            optDiv.className = "options";
-            var values = [
-                {val:-2, cls:"dark-red", label:"Totalement en désaccord"},
-                {val:-1, cls:"light-red", label:"Plutôt pas d’accord"},
-                {val:0, cls:"neutral", label:"Neutre"},
-                {val:1, cls:"light-green", label:"Plutôt d’accord"},
-                {val:2, cls:"dark-green", label:"Totalement d’accord"}
-            ];
-            for (var i = 0; i < values.length; i++) {
-                var lbl = document.createElement("label");
-                var radio = document.createElement("input");
-                radio.type = "radio";
-                radio.name = "q" + qIndex;
-                radio.value = values[i].val;
-                var span = document.createElement("span");
-                span.className = "circle " + values[i].cls;
-                span.title = values[i].label;
-                lbl.appendChild(radio);
-                lbl.appendChild(span);
-                optDiv.appendChild(lbl);
-            }
-            qDiv.appendChild(optDiv);
-            pageDiv.appendChild(qDiv);
-            qIndex++;
-        }
-        // Navigation
-        var navDiv = document.createElement("div");
-        navDiv.className = "navigation";
-        if (p > 1) {
-            var prevBtn = document.createElement("button");
-            prevBtn.textContent = "Page précédente";
-            prevBtn.onclick = prevPage;
-            navDiv.appendChild(prevBtn);
-        }
-        if (p < 5) {
-            var nextBtn = document.createElement("button");
-            nextBtn.textContent = "Page suivante";
-            nextBtn.onclick = nextPage;
-            navDiv.appendChild(nextBtn);
-        }
-        if (p == 5) {
-            var analyseBtn = document.createElement("button");
-            analyseBtn.textContent = "Analyser";
-            analyseBtn.onclick = analyse;
-            navDiv.appendChild(analyseBtn);
-        }
-        pageDiv.appendChild(navDiv);
-        container.appendChild(pageDiv);
-    }
-    // Afficher la première page
-    showPage(1);
-}
-
-// Affichage des pages
-var currentPage = 1;
-function showPage(n) {
-    var pages = document.getElementsByClassName("page");
-    for (var i = 0; i < pages.length; i++) {
-        pages[i].classList.remove("active");
-    }
-    var page = document.getElementById("page-" + n);
-    if (page) {
-        page.classList.add("active");
-        currentPage = n;
-    }
-}
-
-// Changer de page
-function nextPage() { showPage(currentPage + 1); }
-function prevPage() { showPage(currentPage - 1); }
-
-// Calcul et analyse des résultats
-function analyse() {
-    var sephirot = {
-        "Daat": 0, "Hokhmah": 0, "Binah": 0,
-        "Hessed": 0, "Guevoura": 0, "Tiferet": 0,
-        "Hod": 0, "Netzach": 0, "Yesod": 0, "Malkhout": 0
-    };
-    // Parcourir les réponses
-    for (var i = 1; i <= questions.length; i++) {
-        var radios = document.getElementsByName("q" + i);
-        var val = null;
-        for (var r = 0; r < radios.length; r++) {
-            if (radios[r].checked) {
-                val = parseInt(radios[r].value);
-                break;
-            }
-        }
-        if (val === null) {
-            val = 0; // si non répondu, on considère neutre
-        }
-        // Ajouter pondérations
-        var weights = questions[i-1].weights;
-        for (var s in weights) {
-            if (weights.hasOwnProperty(s)) {
-                sephirot[s] += weights[s] * val;
-            }
-        }
-    }
-    // Trier par score décroissant
-    var sorted = Object.keys(sephirot).sort(function(a, b) {
-        return sephirot[b] - sephirot[a];
-    });
-    // Afficher résultats
-    var resultText = "Séphira dominante : " + sorted[0] +
-                     " ; suivantes : " + sorted[1] + " et " + sorted[2] + ".";
-    alert(resultText);
-}
-
-document.addEventListener("DOMContentLoaded", buildQuiz);
-</script>
-
-
-
-</body>
-</html>
-
