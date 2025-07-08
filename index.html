@@ -602,6 +602,7 @@
 
     <div class="analyze-section">
      <button class="analyze-button" id="analyze-btn" disabled>Analyser</button>
+<div id="result-section" class="hidden"></div>
 
     </div>
   </div>
@@ -729,45 +730,36 @@ function updateProgress() {
    
 function analyzeResult() {
   const scores = {};
-
-  // Calcule des scores pour chaque Séphira en fonction des réponses
   questions.forEach((question, index) => {
     const selected = document.querySelector(`input[name="q${index}"]:checked`);
     if (selected) {
       const value = parseInt(selected.value);
       for (const [sephira, weight] of Object.entries(question.weights)) {
-        if (!scores[sephira]) scores[sephira] = 0;
-        scores[sephira] += value * weight;
+        scores[sephira] = (scores[sephira] || 0) + value * weight;
       }
     }
   });
 
-  // Trie les Séphirot par score décroissant
   const sorted = Object.entries(scores).sort((a, b) => b[1] - a[1]);
-
-  // Récupère la dominante et la secondaire
   const bestSephira = sorted[0]?.[0];
   const secondSephira = sorted[1]?.[0];
-
-  // Récupère leurs descriptions
   const bestDescription = sephirotDescriptions[bestSephira] || "Pas de description.";
   const secondDescription = sephirotDescriptions[secondSephira] || "Pas de description.";
 
-  // Affiche le résultat
- // ➤ Cacher les éléments et afficher les résultats
-document.getElementById("questions-container").style.display = "none";
-document.querySelector(".progress-container").style.display = "none";
-document.getElementById("analyze-btn").style.display = "none";
-document.getElementById("result-section").classList.remove("hidden");
+  const resultSection = document.getElementById("result-section");
+  resultSection.innerHTML = `
+    <h2>✨ Ta Séphira dominante : ${bestSephira}</h2>
+    <p>${bestDescription}</p>
+    <h2>🌟 Ta Séphira secondaire : ${secondSephira}</h2>
+    <p>${secondDescription}</p>
+  `;
+  resultSection.classList.remove("hidden");
+  window.scrollTo({ top: resultSection.offsetTop, behavior: 'smooth' });
+}
 
-// ➤ Insérer les résultats dans le HTML
-document.getElementById("main-sephira-text").innerHTML =
-  `<strong>${bestSephira}</strong><br>${bestDescription}`;
-document.getElementById("secondary-sephira-text").innerHTML =
-  `<strong>${secondSephira}</strong><br>${secondDescription}`;
 
  window.addEventListener("DOMContentLoaded", () => {
-  buildQuiz(); // ✅ Construit le quiz après que la page soit chargée
+   buildQuiz(); // ✅ Construit le quiz après que la page soit chargée
   document.getElementById("analyze-btn").addEventListener("click", analyzeResult);
 });
 
