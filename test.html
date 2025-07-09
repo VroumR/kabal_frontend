@@ -601,6 +601,34 @@
   box-shadow: 0 8px 20px var(--shadow-gold);
 }
 
+.pdf-download {
+  display: inline-block;
+  margin: 20px auto;
+  padding: 12px 25px;
+  background: var(--gradient-gold);
+  color: white;
+  border-radius: 20px;
+  font-family: 'Cinzel', serif;
+  font-size: 1.1rem;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  animation: pulseLink 6s infinite;
+}
+
+.pdf-download:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px var(--shadow-gold);
+}
+
+.pdf-download:active {
+  transform: scale(0.96);
+  box-shadow: 0 4px 10px var(--shadow-gold);
+}
+
+@keyframes pulseLink {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.95; transform: scale(1.015); }
+}
 
 
 </style>
