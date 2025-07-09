@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KABAL – Accueil</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600&family=Cormorant+Garamond:wght@400;500;600&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/hebcal@2.4.1/dist/hebcal.min.js"></script>
+  <style>
+    body {
+      font-family: 'Cormorant Garamond', serif;
+      background: linear-gradient(135deg, #FEFEFE 0%, #F8F8F8 100%);
+      color: #2C2C2C;
+      text-align: center;
+      padding: 50px 20px;
+    }
+
+    .logo-img {
+      width: 300px;
+      height: 300px;
+      object-fit: contain;
+      animation: logoPulse 8s ease-in-out infinite;
+      filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.3));
+    }
+
+    @keyframes logoPulse {
+      0% { transform: scale(1) rotate(0deg); opacity: 1; }
+      50% { transform: scale(1.03) rotate(1deg); opacity: 0.96; }
+      100% { transform: scale(1) rotate(0deg); opacity: 1; }
+    }
+
+    h1 {
+      font-family: 'Cinzel', serif;
+      font-size: 2.8rem;
+      color: #B8860B;
+      margin: 20px 0 10px;
+    }
+
+    .subtitle {
+      font-size: 1.2rem;
+      font-style: italic;
+      color: #444;
+      margin-bottom: 40px;
+    }
+
+    .form-container {
+      background: #fff;
+      border: 2px solid #F4E4BC;
+      border-radius: 20px;
+      padding: 40px;
+      max-width: 500px;
+      margin: 0 auto;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+    }
+
+    label {
+      display: block;
+      margin-bottom: 10px;
+      font-weight: 500;
+      color: #B8860B;
+      font-size: 1.1rem;
+    }
+
+    input[type="date"], input[type="time"] {
+      padding: 12px;
+      width: 100%;
+      border: 2px solid #F4E4BC;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem;
+    }
+
+    button {
+      padding: 15px 30px;
+      font-size: 1.2rem;
+      font-family: 'Cinzel', serif;
+      border: none;
+      border-radius: 30px;
+      background: linear-gradient(135deg, #D4AF37 0%, #F4E4BC 100%);
+      color: white;
+      cursor: pointer;
+      box-shadow: 0 10px 25px rgba(212, 175, 55, 0.3);
+      transition: all 0.3s ease;
+    }
+
+    button:hover {
+      transform: translateY(-4px);
+      background: linear-gradient(135deg, #F4E4BC 0%, #D4AF37 100%);
+      color: #2C2C2C;
+    }
+  </style>
+</head>
+<body>
+  <img src="https://vroumr.github.io/kabal_frontend/assets/logo_kabal.png" alt="Logo KABAL" class="logo-img">
+  <h1>Bienvenue sur KABAL</h1>
+  <p class="subtitle">Découvrez votre Séphira principale à travers un test approfondi </p>
+
+  <div class="form-container">
+    <label for="dob">Date de naissance</label>
+    <input type="date" id="dob">
+
+    <label for="hour">Heure de naissance</label>
+    <input type="time" id="hour">
+
+    <button onclick="startTest()">Commencer mon test</button>
+  </div>
+
+  <script>
+    const sephiraParMois = {
+      1: "Tiferet", 2: "Guevoura", 3: "Hod", 4: "Hokhmah", 5: "Netzach", 6: "Yesod",
+      7: "Malkhout", 8: "Binah", 9: "Hokhmah", 10: "Guevoura", 11: "Hessed", 12: "Tiferet"
+    };
+
+    function getSephiraParHeure(h) {
+      const heure = parseInt(h);
+      if (heure >= 0 && heure < 2) return "Yesod";
+      if (heure >= 2 && heure < 4) return "Malkhout";
+      if (heure >= 4 && heure < 6) return "Daat";
+      if (heure >= 6 && heure < 8) return "Hokhmah";
+      if (heure >= 8 && heure < 10) return "Binah";
+      if (heure >= 10 && heure < 12) return "Hessed";
+      if (heure >= 12 && heure < 14) return "Tiferet";
+      if (heure >= 14 && heure < 16) return "Guevoura";
+      if (heure >= 16 && heure < 18) return "Netzach";
+      if (heure >= 18 && heure < 20) return "Hod";
+      return "Malkhout";
+    }
+
+    function startTest() {
+      const date = document.getElementById("dob").value;
+      const hour = document.getElementById("hour").value;
+      if (!date || !hour) return alert("Merci de remplir tous les champs.");
+
+      const gdate = new Date(date);
+      const hDate = new Hebcal.HDate(gdate);
+      const moisHebrew = hDate.month;
+      const heureNum = parseInt(hour.split(":")[0]);
+
+      const sefiraMois = sephiraParMois[moisHebrew];
+      const sefiraHeure = getSephiraParHeure(heureNum);
+
+      // Stockage local pour utilisation dans test.html
+      localStorage.setItem("bonusMois", sefiraMois);
+      localStorage.setItem("bonusHeure", sefiraHeure);
+
+      window.location.href = "test.html";
+    }
+  </script>
+</body>
+</html>
