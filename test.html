@@ -584,6 +584,22 @@
   50% { transform: scale(1.03) rotate(1deg); opacity: 0.96; }
   100% { transform: scale(1) rotate(0deg); opacity: 1; }
 }
+.pdf-download {
+  display: inline-block;
+  margin: 20px auto;
+  padding: 12px 25px;
+  background: var(--gradient-gold);
+  color: white;
+  border-radius: 20px;
+  font-family: 'Cinzel', serif;
+  font-size: 1.1rem;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+.pdf-download:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px var(--shadow-gold);
+}
 
 
 
@@ -796,25 +812,17 @@ function analyzeResult() {
   const thirdDescription = sephirotDescriptions[thirdSephira] || "Pas de description.";
 
   const resultSection = document.getElementById("result-section");
-  const jourFr = localStorage.getItem("jourFr");
-const hebrewDate = localStorage.getItem("hebrewDate");
+const pdfLink = `https://vroumr.github.io/kabal_frontend/pdfs/${bestSephira.toLowerCase()}.pdf`; // en minuscules
 
-  resultSection.innerHTML = `
-  <p style="font-weight: 500; font-style: italic; margin-bottom: 20px;">
-  🕰️ Tu es né(e) un <strong>${jourFr}</strong>, soit le <strong>${hebrewDate}</strong> (calendrier hébraïque)
-</p>
-
-    <h2>✨ Ta Séphira dominante : ${bestSephira}</h2>
-    <p>${bestDescription}</p>
-    <h2>🌟 Ta Séphira secondaire : ${secondSephira}</h2>
-    <p>${secondDescription}</p>
-  <h2>🔹 Ta Séphira tertiaire : ${thirdSephira}</h2>
-<p>${thirdDescription}</p>
-
-  `;
-  resultSection.classList.remove("hidden");
-  window.scrollTo({ top: resultSection.offsetTop, behavior: 'smooth' });
-}
+resultSection.innerHTML = `
+  <h2>🕯️ Tu es né(e) un ${localStorage.getItem("jourFr")}, soit le ${localStorage.getItem("hebrewDate")}</h2>
+  <h2>✨ Ta Séphira dominante : ${bestSephira}</h2>
+  <p>${bestDescription}</p>
+  <a href="${pdfLink}" target="_blank" download class="pdf-download">📥 Télécharger la fiche ${bestSephira}</a>
+  <h2>🌟 Ta Séphira secondaire : ${secondSephira}</h2>
+  <p>${secondDescription}</p>
+  <button onclick="location.reload()">🔄 Recommencer</button>
+`;
 
 
  window.addEventListener("DOMContentLoaded", () => {
