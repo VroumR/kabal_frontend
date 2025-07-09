@@ -851,14 +851,13 @@ resultSection.innerHTML = `
   <p>${secondDescription}</p>
   <button onclick="location.reload()">🔄 Recommencer</button>
 `;
+} // 👈 fin de la fonction analyzeResult
 
-}
-
-
- window.addEventListener("DOMContentLoaded", () => {
-   buildQuiz(); // ✅ Construit le quiz après que la page soit chargée
+window.addEventListener("DOMContentLoaded", () => {
+  buildQuiz(); // ✅ Construit le quiz après que la page soit chargée
   document.getElementById("analyze-btn").addEventListener("click", analyzeResult);
 });
+
 
     </script>
   </body>
