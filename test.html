@@ -79,6 +79,13 @@
   <div id="resultat" class="resultat"></div>
 
   <script>
+    const bonusMois = localStorage.getItem("bonusMois");
+const bonusHeure = localStorage.getItem("bonusHeure");
+    // Nettoyage après récupération
+localStorage.removeItem("bonusMois");
+localStorage.removeItem("bonusHeure");
+
+
     async function loadQuestions() {
       const res = await fetch("https://kabal-blackend.onrender.com/questions");
       const questions = await res.json();
@@ -121,10 +128,14 @@
       const formData = new FormData(e.target);
       const data = [];
 
+
+
       for (let [key, value] of formData.entries()) {
         const id = parseInt(key.replace("q", ""));
         data.push({ id, value: parseInt(value) });
       }
+if (bonusMois) data.push({ id: `bonus_${bonusMois}`, value: 1 });
+if (bonusHeure) data.push({ id: `bonus_${bonusHeure}`, value: 1 });
 
       const res = await fetch("https://kabal-blackend.onrender.com/analyser-test", {
         method: "POST",
