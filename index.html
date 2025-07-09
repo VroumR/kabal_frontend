@@ -121,29 +121,35 @@ html_corrected = """
       if (heure >= 18 && heure < 20) return "Hod";
       return "Malkhout";
     }
+document.getElementById("startBtn").addEventListener("click", () => {
+  const date = document.getElementById("dob").value;
+  const hour = document.getElementById("hour").value;
+  if (!date || !hour) return alert("Merci de remplir tous les champs.");
 
-    document.getElementById("startBtn").addEventListener("click", () => {
-      const date = document.getElementById("dob").value;
-      const hour = document.getElementById("hour").value;
-      if (!date || !hour) return alert("Merci de remplir tous les champs.");
+  try {
+    // ✅ Vérification que Hebcal est bien chargé
+    if (typeof Hebcal === "undefined") {
+      alert("Erreur : Hebcal ne s'est pas chargé correctement.");
+      return;
+    }
 
-      try {
-        const gdate = new Date(date);
-        const hDate = new Hebcal.HDate(gdate);
-        const moisHebrew = hDate.month;
-        const heureNum = parseInt(hour.split(":")[0], 10);
+    const gdate = new Date(date);
+    const hDate = new Hebcal.HDate(gdate, Hebcal.greg()); // ✅ date grégorienne précisée
+    const moisHebrew = hDate.month;
+    const heureNum = parseInt(hour.split(":")[0], 10);
 
-        const sefiraMois = sephiraParMois[moisHebrew];
-        const sefiraHeure = getSephiraParHeure(heureNum);
+    const sefiraMois = sephiraParMois[moisHebrew];
+    const sefiraHeure = getSephiraParHeure(heureNum);
 
-        localStorage.setItem("bonusMois", sefiraMois);
-        localStorage.setItem("bonusHeure", sefiraHeure);
+    localStorage.setItem("bonusMois", sefiraMois);
+    localStorage.setItem("bonusHeure", sefiraHeure);
 
-        window.location.href = "test.html";
-      } catch (err) {
-        alert("Erreur interne : " + err.message);
-      }
-    });
+    window.location.href = "test.html";
+  } catch (err) {
+    alert("Erreur interne : " + err.message);
+  }
+});
+
   </script>
 </body>
 </html>
