@@ -135,30 +135,37 @@
         alert("Erreur : Hebcal ne s'est pas chargé correctement.");
         return;
       }
+const gdate = new Date(date);
+const heureNum = parseInt(hour.split(":")[0], 10);
 
-      const gdate = new Date(date);
-      const hDate = new Hebcal.HDate(gdate);
+// ✅ Ajustement après coucher du soleil (18h)
+if (heureNum >= 18) {
+  gdate.setDate(gdate.getDate() + 1);
+}
 
-      const moisHebrew = hDate.month;
-      const heureNum = parseInt(hour.split(":")[0], 10);
-      const sephiraMois = sephiraParMois[moisHebrew];
-      const sephiraHeure = getSephiraParHeure(heureNum);
+const hDate = new Hebcal.HDate(gdate);
 
-      const sephiraParJour = {
-        0: "Hessed", 1: "Guevoura", 2: "Tiferet",
-        3: "Netzach", 4: "Hod", 5: "Yesod", 6: "Malkhout"
-      };
-      const joursFr = ["Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Shabbat"];
-      const jourHebdo = gdate.getDay();
-      const jourFr = joursFr[jourHebdo];
-      const sephiraJour = sephiraParJour[jourHebdo];
-      const hebrewDate = hDate.toString();
+// ✅ Séphirot bonus
+const moisHebrew = hDate.month;
+const sephiraMois = sephiraParMois[moisHebrew];
+const sephiraHeure = getSephiraParHeure(heureNum);
+localStorage.setItem("bonusMois", sephiraMois);
+localStorage.setItem("bonusHeure", sephiraHeure);
 
-      localStorage.setItem("bonusMois", sephiraMois);
-      localStorage.setItem("bonusHeure", sephiraHeure);
-      localStorage.setItem("bonusJour", sephiraJour);
-      localStorage.setItem("jourFr", jourFr);
-      localStorage.setItem("hebrewDate", hebrewDate);
+// ✅ Jour de la semaine
+const sephiraParJour = {
+  0: "Hessed", 1: "Guevoura", 2: "Tiferet",
+  3: "Netzach", 4: "Hod", 5: "Yesod", 6: "Malkhout"
+};
+const joursFr = ["Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Shabbat"];
+const jourHebdo = gdate.getDay();
+const jourFr = joursFr[jourHebdo];
+const hebrewDate = hDate.toString();
+
+localStorage.setItem("bonusJour", sephiraParJour[jourHebdo]);
+localStorage.setItem("jourFr", jourFr);
+localStorage.setItem("hebrewDate", hebrewDate);
+
 
       window.location.href = "test.html";
     } catch (err) {
