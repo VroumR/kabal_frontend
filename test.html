@@ -831,49 +831,49 @@ function analyzeResult() {
     scores[bonusJour] += 0.5;
   }
 
-  const sorted = Object.entries(scores).sort((a, b) => b[1] - a[1]);
-  const bestSephira = sorted[0]?.[0];
-  const secondSephira = sorted[1]?.[0];
-  const thirdSephira = sorted[2]?.[0];
+const sorted = Object.entries(scores).sort((a, b) => b[1] - a[1]);
+const bestSephira = sorted[0]?.[0];
+const secondSephira = sorted[1]?.[0];
+const thirdSephira = sorted[2]?.[0];
 
-  // ⚠️ Sécurité : vérifie qu’on a bien un résultat
-  if (!bestSephira || !secondSephira) {
-    alert("Erreur : le test n'a pas pu déterminer de Séphira. Vérifie que toutes les questions ont été remplies.");
-    return;
-  }
-
-  const bestDescription = sephirotDescriptions[bestSephira] || "Pas de description.";
-  const secondDescription = sephirotDescriptions[secondSephira] || "Pas de description.";
-
-  // 🔐 Sécurisation des données du localStorage
-  const jour = localStorage.getItem("jourFr") || "jour inconnu";
-  const date = localStorage.getItem("hebrewDate") || "date inconnue";
-
-  // 📎 Lien vers la fiche PDF
-  const pdfLink = `https://vroumr.github.io/kabal_frontend/pdfs/${bestSephira.toLowerCase()}.pdf`;
-
-  // 🎯 Affichage résultat
-  const resultSection = document.getElementById("result-section");
-  resultSection.classList.remove("hidden");
-  resultSection.innerHTML = `
-    <h2>🕯️ Tu es né(e) un ${jour}, soit le ${date}</h2>
-    <h2>✨ Ta Séphira dominante : ${bestSephira}</h2>
-    <p>${bestDescription}</p>
-    <a href="${pdfLink}" target="_blank" download class="pdf-download">📥 Télécharger la fiche ${bestSephira}</a>
-    <h2>🌟 Ta Séphira secondaire : ${secondSephira}</h2>
-    <p>${secondDescription}</p>
-    <button onclick="location.reload()">🔄 Recommencer</button>
-  `;
+if (!bestSephira || !secondSephira || !thirdSephira) {
+  alert("Erreur : le test n'a pas pu déterminer les 3 Séphirot principales.");
+  return;
 }
 
+const bestDescription = sephirotDescriptions[bestSephira] || "Pas de description.";
+const secondDescription = sephirotDescriptions[secondSephira] || "Pas de description.";
+const thirdDescription = sephirotDescriptions[thirdSephira] || "Pas de description.";
 
+const jour = localStorage.getItem("jourFr") || "jour inconnu";
+const date = localStorage.getItem("hebrewDate") || "date inconnue";
 
+// 📎 Liens vers les fiches PDF
+const bestPdf = `https://vroumr.github.io/kabal_frontend/pdfs/${bestSephira.toLowerCase()}.pdf`;
+const secondPdf = `https://vroumr.github.io/kabal_frontend/pdfs/${secondSephira.toLowerCase()}.pdf`;
+const thirdPdf = `https://vroumr.github.io/kabal_frontend/pdfs/${thirdSephira.toLowerCase()}.pdf`;
 
-window.addEventListener("DOMContentLoaded", () => {
-  buildQuiz(); // ✅ Construit le quiz après que la page soit chargée
-  document.getElementById("analyze-btn").addEventListener("click", analyzeResult);
+const resultSection = document.getElementById("result-section");
+resultSection.classList.remove("hidden");
 
-});
+resultSection.innerHTML = `
+  <h2>🕯️ Tu es né(e) un ${jour}, soit le ${date}</h2>
+
+  <h2>✨ Ta Séphira dominante : ${bestSephira}</h2>
+  <p>${bestDescription}</p>
+  <a href="${bestPdf}" target="_blank" download class="pdf-download">📥 Télécharger la fiche ${bestSephira}</a>
+
+  <h2>🌟 Ta Séphira secondaire : ${secondSephira}</h2>
+  <p>${secondDescription}</p>
+  <a href="${secondPdf}" target="_blank" download class="pdf-download">📥 Télécharger la fiche ${secondSephira}</a>
+
+  <h2>🔹 Ta 3ème Séphira en force : ${thirdSephira}</h2>
+  <p>${thirdDescription}</p>
+  <a href="${thirdPdf}" target="_blank" download class="pdf-download">📥 Télécharger la fiche ${thirdSephira}</a>
+
+  <button onclick="location.reload()">🔄 Recommencer</button>
+`;
+
 
     </script>
   </body>
