@@ -779,7 +779,10 @@ container.innerHTML = ""; // ✅ empêche la duplication si appelé plusieurs fo
     container.appendChild(questionDiv);
   });
 }
-
+document.querySelectorAll('input[type="radio"]').forEach(input => {
+    input.addEventListener("change", updateProgress);
+  });
+}
 // ✅ Appel sécurisé au chargement
 
  
@@ -856,8 +859,7 @@ resultSection.innerHTML = `
 window.addEventListener("DOMContentLoaded", () => {
   buildQuiz(); // ✅ Construit le quiz après que la page soit chargée
   document.getElementById("analyze-btn").addEventListener("click", analyzeResult);
-   document.querySelectorAll('input[type="radio"]').forEach(input => {
-    input.addEventListener("change", updateProgress);
+  ;
 });
 
 
