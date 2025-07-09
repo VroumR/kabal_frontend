@@ -572,10 +572,19 @@
   margin: 15px 0;
 }
 .logo-img {
-  width: 100px;
-  height: 100px;
+  width: 300px;
+  height: 300px;
   object-fit: contain;
+  animation: logoPulse 8s ease-in-out infinite;
+  transition: transform 0.5s ease;
+  filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.3));
 }
+@keyframes logoPulse {
+  0% { transform: scale(1) rotate(0deg); opacity: 1; }
+  50% { transform: scale(1.03) rotate(1deg); opacity: 0.96; }
+  100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+
 
 
 </style>
@@ -585,7 +594,19 @@
   <div class="container">
   
     <header>
+ <div style="position: relative; display: inline-block;">
   <img src="https://vroumr.github.io/kabal_frontend/assets/logo_kabal.png" alt="Logo KABAL" class="logo-img">
+  <div style="
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 360px; height: 360px;
+    border-radius: 50%;
+    background: radial-gradient(rgba(212,175,55,0.15), transparent 70%);
+    z-index: -1;
+  "></div>
+</div>
+
   <h1>Trouve ta Séphira</h1>
   <p class="subtitle">Réponds aux affirmations pour révéler ta Sephira dominante</p>
 </header>
