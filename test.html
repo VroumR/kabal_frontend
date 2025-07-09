@@ -856,6 +856,8 @@ resultSection.innerHTML = `
 window.addEventListener("DOMContentLoaded", () => {
   buildQuiz(); // ✅ Construit le quiz après que la page soit chargée
   document.getElementById("analyze-btn").addEventListener("click", analyzeResult);
+   document.querySelectorAll('input[type="radio"]').forEach(input => {
+    input.addEventListener("change", updateProgress);
 });
 
 
