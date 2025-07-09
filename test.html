@@ -800,6 +800,10 @@ function analyzeResult() {
 const hebrewDate = localStorage.getItem("hebrewDate");
 
   resultSection.innerHTML = `
+  <p style="font-weight: 500; font-style: italic; margin-bottom: 20px;">
+  🕰️ Tu es né(e) un <strong>${jourFr}</strong>, soit le <strong>${hebrewDate}</strong> (calendrier hébraïque)
+</p>
+
     <h2>✨ Ta Séphira dominante : ${bestSephira}</h2>
     <p>${bestDescription}</p>
     <h2>🌟 Ta Séphira secondaire : ${secondSephira}</h2>
