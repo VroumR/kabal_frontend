@@ -768,6 +768,22 @@ function analyzeResult() {
       }
     }
   });
+  // 🎁 Ajouter les bonus depuis localStorage
+  const bonusMois = localStorage.getItem("bonusMois");
+  const bonusHeure = localStorage.getItem("bonusHeure");
+  const bonusJour = localStorage.getItem("bonusJour");
+
+  if (bonusMois && scores[bonusMois] !== undefined) {
+    scores[bonusMois] += 1;
+  }
+
+  if (bonusHeure && scores[bonusHeure] !== undefined) {
+    scores[bonusHeure] += 1;
+  }
+
+  if (bonusJour && scores[bonusJour] !== undefined) {
+    scores[bonusJour] += 0.5;
+  }
 
   const sorted = Object.entries(scores).sort((a, b) => b[1] - a[1]);
   const bestSephira = sorted[0]?.[0];
