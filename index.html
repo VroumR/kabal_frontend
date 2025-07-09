@@ -175,37 +175,83 @@ document.getElementById("startBtn").addEventListener("click", () => {
       return;
     }
 
-const gdate = new Date(date);
-const hDate = new Hebcal.HDate(gdate);
+document.getElementById("startBtn").addEventListener("click", () => {
+  const date = document.getElementById("dob").value;
+  const hour = document.getElementById("hour").value;
 
-// ✅ Séphirot bonus
-const moisHebrew = hDate.month;
-const heureNum = parseInt(hour.split(":")[0], 10);
-const sephiraMois = sephiraParMois[moisHebrew];
-const sephiraHeure = getSephiraParHeure(heureNum);
-localStorage.setItem("bonusMois", sephiraMois);
-localStorage.setItem("bonusHeure", sephiraHeure);
+  if (!date || !hour) {
+    alert("Merci de remplir tous les champs.");
+    return;
+  }
 
-// ✅ Jour de la semaine
-const sephiraParJour = {
-  0: "Hessed", 1: "Guevoura", 2: "Tiferet",
-  3: "Netzach", 4: "Hod", 5: "Yesod", 6: "Malkhout"
-};
-const joursFr = ["Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Shabbat"];
-const jourHebdo = gdate.getDay();
-const jourFr = joursFr[jourHebdo];
-const hebrewDate = hDate.toString();
+  try {
+    if (typeof Hebcal === "undefined") {
+      alert("Erreur : Hebcal ne s'est pas chargé correctement.");
+      return;
+    }
 
-localStorage.setItem("bonusJour", sephiraParJour[jourHebdo]);
-localStorage.setItem("jourFr", jourFr);
-localStorage.setItem("hebrewDate", hebrewDate);
+document.getElementById("startBtn").addEventListener("click", () => {
+  const date = document.getElementById("dob").value;
+  const hour = document.getElementById("hour").value;
 
-window.location.href = "test.html";
+  if (!date || !hour) {
+    alert("Merci de remplir tous les champs.");
+    return;
+  }
 
+  try {
+    if (typeof Hebcal === "undefined") {
+      alert("Erreur : Hebcal ne s'est pas chargé correctement.");
+      return;
+    }
+document.getElementById("startBtn").addEventListener("click", () => {
+  const date = document.getElementById("dob").value;
+  const hour = document.getElementById("hour").value;
+
+  if (!date || !hour) {
+    alert("Merci de remplir tous les champs.");
+    return;
+  }
+
+  try {
+    if (typeof Hebcal === "undefined") {
+      alert("Erreur : Hebcal ne s'est pas chargé correctement.");
+      return;
+    }
+
+    const gdate = new Date(date);
+    const hDate = new Hebcal.HDate(gdate);
+
+    // ✅ Séphirot bonus
+    const moisHebrew = hDate.month;
+    const heureNum = parseInt(hour.split(":")[0], 10);
+    const sephiraMois = sephiraParMois[moisHebrew];
+    const sephiraHeure = getSephiraParHeure(heureNum);
+    localStorage.setItem("bonusMois", sephiraMois);
+    localStorage.setItem("bonusHeure", sephiraHeure);
+
+    // ✅ Jour de la semaine
+    const sephiraParJour = {
+      0: "Hessed", 1: "Guevoura", 2: "Tiferet",
+      3: "Netzach", 4: "Hod", 5: "Yesod", 6: "Malkhout"
+    };
+    const joursFr = ["Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Shabbat"];
+    const jourHebdo = gdate.getDay();
+    const jourFr = joursFr[jourHebdo];
+    const hebrewDate = hDate.toString();
+
+    localStorage.setItem("bonusJour", sephiraParJour[jourHebdo]);
+    localStorage.setItem("jourFr", jourFr);
+    localStorage.setItem("hebrewDate", hebrewDate);
+
+    window.location.href = "test.html";
   } catch (err) {
     alert("Erreur interne : " + err.message);
   }
 });
+
+
+
 
   </script>
 </body>
