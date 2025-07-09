@@ -679,7 +679,7 @@
 
     </div>
   </div>
-</body>
+
 
 
   <script>
@@ -749,27 +749,27 @@ container.innerHTML = ""; // ✅ empêche la duplication si appelé plusieurs fo
   <p>${question.text}</p>
   <div class="options horizontal">
     <label class="option-label-horizontal">
-      <input type="radio" name="q${index}" value="-2" onchange="updateProgress()">
+      <input type="radio" name="q${index}" value="-2" >
       <div class="circle dark-red"></div>
       <span>Extrêmement pas d’accord</span>
     </label>
     <label class="option-label-horizontal">
-      <input type="radio" name="q${index}" value="-1" onchange="updateProgress()">
+      <input type="radio" name="q${index}" value="-1" >
       <div class="circle light-red"></div>
       <span>Plutôt pas d’accord</span>
     </label>
     <label class="option-label-horizontal">
-      <input type="radio" name="q${index}" value="0" onchange="updateProgress()">
+      <input type="radio" name="q${index}" value="0" >
       <div class="circle neutral"></div>
       <span>Neutre</span>
     </label>
     <label class="option-label-horizontal">
-      <input type="radio" name="q${index}" value="1" onchange="updateProgress()">
+      <input type="radio" name="q${index}" value="1" >
       <div class="circle light-green"></div>
       <span>Plutôt d’accord</span>
     </label>
     <label class="option-label-horizontal">
-      <input type="radio" name="q${index}" value="2" onchange="updateProgress()">
+      <input type="radio" name="q${index}" value="2" >
       <div class="circle dark-green"></div>
       <span>Extrêmement d’accord</span>
     </label>
