@@ -123,6 +123,20 @@
 document.getElementById("startBtn").addEventListener("click", () => {
   const date = document.getElementById("dob").value;
   const hour = document.getElementById("hour").value;
+  const sephiraParJour = {
+  0: "Hessed",    // Dimanche
+  1: "Guevoura",  // Lundi
+  2: "Tiferet",   // Mardi
+  3: "Netzach",   // Mercredi
+  4: "Hod",       // Jeudi
+  5: "Yesod",     // Vendredi
+  6: "Malkhout"   // Shabbat
+};
+
+const jourHebdo = gdate.getDay(); // retourne 0 à 6
+const sephiraJour = sephiraParJour[jourHebdo];
+localStorage.setItem("bonusJour", sephiraJour);
+
   if (!date || !hour) return alert("Merci de remplir tous les champs.");
 
   try {
