@@ -629,6 +629,35 @@
   0%, 100% { opacity: 1; transform: scale(1); }
   50% { opacity: 0.95; transform: scale(1.015); }
 }
+<style>
+  /* ... ton CSS déjà présent ... */
+
+  .replay-button {
+    margin-top: 30px;
+    padding: 15px 30px;
+    background: var(--gradient-gold);
+    color: white;
+    border: none;
+    border-radius: 30px;
+    font-family: 'Cinzel', serif;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 25px var(--shadow-gold);
+  }
+
+  .replay-button:hover {
+    transform: translateY(-3px);
+    background: var(--gradient-reverse);
+    color: var(--text-dark);
+    box-shadow: 0 12px 30px var(--shadow-gold);
+  }
+
+  .replay-button:active {
+    transform: scale(0.97);
+    box-shadow: 0 5px 15px var(--shadow-gold);
+  }
+
 
 
 </style>
@@ -856,6 +885,9 @@ const thirdPdf = `https://vroumr.github.io/kabal_frontend/pdfs/${thirdSephira.to
 const resultSection = document.getElementById("result-section");
 resultSection.classList.remove("hidden");
 
+const resultSection = document.getElementById("result-section");
+resultSection.classList.remove("hidden");
+
 resultSection.innerHTML = `
   <h2>🕯️ Tu es né(e) un ${jour}, soit le ${date}</h2>
 
@@ -871,7 +903,7 @@ resultSection.innerHTML = `
   <p>${thirdDescription}</p>
   <a href="${thirdPdf}" target="_blank" download class="pdf-download">📥 Télécharger la fiche ${thirdSephira}</a>
 
-  <button onclick="location.reload()">🔄 Recommencer</button>
+  <button class="replay-button" onclick="location.reload()">🔄 Recommencer le test</button>
 `;
 
 
