@@ -107,7 +107,12 @@
     <button onclick="startTest()">Commencer mon test</button>
   </div>
 
-  <script>
+<!-- Charger la librairie Hebcal -->
+<script src="https://cdn.jsdelivr.net/npm/hebcal@2.4.1/dist/hebcal.min.js"></script>
+
+<!-- Ton code une fois que la page est prête -->
+<script>
+  window.addEventListener("DOMContentLoaded", () => {
     const sephiraParMois = {
       1: "Tiferet", 2: "Guevoura", 3: "Hod", 4: "Hokhmah", 5: "Netzach", 6: "Yesod",
       7: "Malkhout", 8: "Binah", 9: "Hokhmah", 10: "Guevoura", 11: "Hessed", 12: "Tiferet"
@@ -128,7 +133,7 @@
       return "Malkhout";
     }
 
-    function startTest() {
+    document.querySelector("button").addEventListener("click", () => {
       const date = document.getElementById("dob").value;
       const hour = document.getElementById("hour").value;
       if (!date || !hour) return alert("Merci de remplir tous les champs.");
@@ -141,12 +146,14 @@
       const sefiraMois = sephiraParMois[moisHebrew];
       const sefiraHeure = getSephiraParHeure(heureNum);
 
-      // Stockage local pour utilisation dans test.html
       localStorage.setItem("bonusMois", sefiraMois);
       localStorage.setItem("bonusHeure", sefiraHeure);
 
       window.location.href = "test.html";
-    }
-  </script>
+    });
+  });
+</script>
+
+
 </body>
 </html>
