@@ -788,8 +788,12 @@ function analyzeResult() {
   const sorted = Object.entries(scores).sort((a, b) => b[1] - a[1]);
   const bestSephira = sorted[0]?.[0];
   const secondSephira = sorted[1]?.[0];
+  const thirdSephira = sorted[2]?.[0];
+
+
   const bestDescription = sephirotDescriptions[bestSephira] || "Pas de description.";
   const secondDescription = sephirotDescriptions[secondSephira] || "Pas de description.";
+  const thirdDescription = sephirotDescriptions[thirdSephira] || "Pas de description.";
 
   const resultSection = document.getElementById("result-section");
   const jourFr = localStorage.getItem("jourFr");
@@ -800,6 +804,9 @@ const hebrewDate = localStorage.getItem("hebrewDate");
     <p>${bestDescription}</p>
     <h2>🌟 Ta Séphira secondaire : ${secondSephira}</h2>
     <p>${secondDescription}</p>
+  <h2>🔹 Ta Séphira tertiaire : ${thirdSephira}</h2>
+<p>${thirdDescription}</p>
+
   `;
   resultSection.classList.remove("hidden");
   window.scrollTo({ top: resultSection.offsetTop, behavior: 'smooth' });
