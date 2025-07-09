@@ -100,160 +100,73 @@
 
 
   <script>
-    const sephiraParMois = {
-      1: "Tiferet", 2: "Guevoura", 3: "Hod", 4: "Hokhmah",
-      5: "Netzach", 6: "Yesod", 7: "Malkhout", 8: "Binah",
-      9: "Hokhmah", 10: "Guevoura", 11: "Hessed", 12: "Tiferet"
-    };
+  const sephiraParMois = {
+    1: "Tiferet", 2: "Guevoura", 3: "Hod", 4: "Hokhmah",
+    5: "Netzach", 6: "Yesod", 7: "Malkhout", 8: "Binah",
+    9: "Hokhmah", 10: "Guevoura", 11: "Hessed", 12: "Tiferet"
+  };
 
-    function getSephiraParHeure(h) {
-      const heure = parseInt(h);
-      if (heure >= 0 && heure < 2) return "Yesod";
-      if (heure >= 2 && heure < 4) return "Malkhout";
-      if (heure >= 4 && heure < 6) return "Daat";
-      if (heure >= 6 && heure < 8) return "Hokhmah";
-      if (heure >= 8 && heure < 10) return "Binah";
-      if (heure >= 10 && heure < 12) return "Hessed";
-      if (heure >= 12 && heure < 14) return "Tiferet";
-      if (heure >= 14 && heure < 16) return "Guevoura";
-      if (heure >= 16 && heure < 18) return "Netzach";
-      if (heure >= 18 && heure < 20) return "Hod";
-      return "Malkhout";
-    }
+  function getSephiraParHeure(h) {
+    const heure = parseInt(h);
+    if (heure >= 0 && heure < 2) return "Yesod";
+    if (heure >= 2 && heure < 4) return "Malkhout";
+    if (heure >= 4 && heure < 6) return "Daat";
+    if (heure >= 6 && heure < 8) return "Hokhmah";
+    if (heure >= 8 && heure < 10) return "Binah";
+    if (heure >= 10 && heure < 12) return "Hessed";
+    if (heure >= 12 && heure < 14) return "Tiferet";
+    if (heure >= 14 && heure < 16) return "Guevoura";
+    if (heure >= 16 && heure < 18) return "Netzach";
+    if (heure >= 18 && heure < 20) return "Hod";
+    return "Malkhout";
+  }
 
+  document.getElementById("startBtn").addEventListener("click", () => {
+    const date = document.getElementById("dob").value;
+    const hour = document.getElementById("hour").value;
 
-document.getElementById("startBtn").addEventListener("click", () => {
-  const date = document.getElementById("dob").value;
-  const hour = document.getElementById("hour").value;
-
-  if (!date || !hour) return alert("Merci de remplir tous les champs.");
-
-  try {
-    if (typeof Hebcal === "undefined") {
-      alert("Erreur : Hebcal ne s'est pas chargé correctement.");
+    if (!date || !hour) {
+      alert("Merci de remplir tous les champs.");
       return;
     }
 
-    const gdate = new Date(date);
-    const hDate = new Hebcal.HDate(gdate);
+    try {
+      if (typeof Hebcal === "undefined") {
+        alert("Erreur : Hebcal ne s'est pas chargé correctement.");
+        return;
+      }
 
-    // ✅ Séphirot bonus
-    const moisHebrew = hDate.month;
-    const heureNum = parseInt(hour.split(":")[0], 10);
-    const sephiraMois = sephiraParMois[moisHebrew];
-    const sephiraHeure = getSephiraParHeure(heureNum);
-    localStorage.setItem("bonusMois", sephiraMois);
-    localStorage.setItem("bonusHeure", sephiraHeure);
+      const gdate = new Date(date);
+      const hDate = new Hebcal.HDate(gdate);
 
-    // ✅ Jour de la semaine
-    const sephiraParJour = {
-      0: "Hessed", 1: "Guevoura", 2: "Tiferet",
-      3: "Netzach", 4: "Hod", 5: "Yesod", 6: "Malkhout"
-    };
-    const joursFr = ["Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Shabbat"];
-    const jourHebdo = gdate.getDay(); // 0 = dimanche
-    const sephiraJour = sephiraParJour[jourHebdo];
-    const jourFr = joursFr[jourHebdo];
+      const moisHebrew = hDate.month;
+      const heureNum = parseInt(hour.split(":")[0], 10);
+      const sephiraMois = sephiraParMois[moisHebrew];
+      const sephiraHeure = getSephiraParHeure(heureNum);
 
-    localStorage.setItem("bonusJour", sephiraJour);
-    localStorage.setItem("jourFr", jourFr);
-    localStorage.setItem("hebrewDate", hDate.toString());
+      const sephiraParJour = {
+        0: "Hessed", 1: "Guevoura", 2: "Tiferet",
+        3: "Netzach", 4: "Hod", 5: "Yesod", 6: "Malkhout"
+      };
+      const joursFr = ["Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Shabbat"];
+      const jourHebdo = gdate.getDay();
+      const jourFr = joursFr[jourHebdo];
+      const sephiraJour = sephiraParJour[jourHebdo];
+      const hebrewDate = hDate.toString();
 
-    window.location.href = "test.html";
-  } catch (err) {
-    alert("Erreur interne : " + err.message);
-  }
-});
+      localStorage.setItem("bonusMois", sephiraMois);
+      localStorage.setItem("bonusHeure", sephiraHeure);
+      localStorage.setItem("bonusJour", sephiraJour);
+      localStorage.setItem("jourFr", jourFr);
+      localStorage.setItem("hebrewDate", hebrewDate);
 
-
-  if (!date || !hour) return alert("Merci de remplir tous les champs.");
-
-  try {
-    // ✅ Vérification que Hebcal est bien chargé
-    if (typeof Hebcal === "undefined") {
-      alert("Erreur : Hebcal ne s'est pas chargé correctement.");
-      return;
+      window.location.href = "test.html";
+    } catch (err) {
+      alert("Erreur interne : " + err.message);
     }
+  });
+</script>
 
-document.getElementById("startBtn").addEventListener("click", () => {
-  const date = document.getElementById("dob").value;
-  const hour = document.getElementById("hour").value;
-
-  if (!date || !hour) {
-    alert("Merci de remplir tous les champs.");
-    return;
-  }
-
-  try {
-    if (typeof Hebcal === "undefined") {
-      alert("Erreur : Hebcal ne s'est pas chargé correctement.");
-      return;
-    }
-
-document.getElementById("startBtn").addEventListener("click", () => {
-  const date = document.getElementById("dob").value;
-  const hour = document.getElementById("hour").value;
-
-  if (!date || !hour) {
-    alert("Merci de remplir tous les champs.");
-    return;
-  }
-
-  try {
-    if (typeof Hebcal === "undefined") {
-      alert("Erreur : Hebcal ne s'est pas chargé correctement.");
-      return;
-    }
-document.getElementById("startBtn").addEventListener("click", () => {
-  const date = document.getElementById("dob").value;
-  const hour = document.getElementById("hour").value;
-
-  if (!date || !hour) {
-    alert("Merci de remplir tous les champs.");
-    return;
-  }
-
-  try {
-    if (typeof Hebcal === "undefined") {
-      alert("Erreur : Hebcal ne s'est pas chargé correctement.");
-      return;
-    }
-
-    const gdate = new Date(date);
-    const hDate = new Hebcal.HDate(gdate);
-
-    // ✅ Séphirot bonus
-    const moisHebrew = hDate.month;
-    const heureNum = parseInt(hour.split(":")[0], 10);
-    const sephiraMois = sephiraParMois[moisHebrew];
-    const sephiraHeure = getSephiraParHeure(heureNum);
-    localStorage.setItem("bonusMois", sephiraMois);
-    localStorage.setItem("bonusHeure", sephiraHeure);
-
-    // ✅ Jour de la semaine
-    const sephiraParJour = {
-      0: "Hessed", 1: "Guevoura", 2: "Tiferet",
-      3: "Netzach", 4: "Hod", 5: "Yesod", 6: "Malkhout"
-    };
-    const joursFr = ["Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Shabbat"];
-    const jourHebdo = gdate.getDay();
-    const jourFr = joursFr[jourHebdo];
-    const hebrewDate = hDate.toString();
-
-    localStorage.setItem("bonusJour", sephiraParJour[jourHebdo]);
-    localStorage.setItem("jourFr", jourFr);
-    localStorage.setItem("hebrewDate", hebrewDate);
-
-    window.location.href = "test.html";
-  } catch (err) {
-    alert("Erreur interne : " + err.message);
-  }
-});
-
-
-
-
-  </script>
 </body>
 </html>
 
