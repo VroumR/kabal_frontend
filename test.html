@@ -815,7 +815,8 @@ function analyzeResult() {
       }
     }
   });
-  // 🎁 Ajouter les bonus depuis localStorage
+
+  // 🎁 Ajout des bonus
   const bonusMois = localStorage.getItem("bonusMois");
   const bonusHeure = localStorage.getItem("bonusHeure");
   const bonusJour = localStorage.getItem("bonusJour");
@@ -823,11 +824,9 @@ function analyzeResult() {
   if (bonusMois && scores[bonusMois] !== undefined) {
     scores[bonusMois] += 1;
   }
-
   if (bonusHeure && scores[bonusHeure] !== undefined) {
     scores[bonusHeure] += 1;
   }
-
   if (bonusJour && scores[bonusJour] !== undefined) {
     scores[bonusJour] += 0.5;
   }
@@ -837,24 +836,37 @@ function analyzeResult() {
   const secondSephira = sorted[1]?.[0];
   const thirdSephira = sorted[2]?.[0];
 
+  // ⚠️ Sécurité : vérifie qu’on a bien un résultat
+  if (!bestSephira || !secondSephira) {
+    alert("Erreur : le test n'a pas pu déterminer de Séphira. Vérifie que toutes les questions ont été remplies.");
+    return;
+  }
 
   const bestDescription = sephirotDescriptions[bestSephira] || "Pas de description.";
   const secondDescription = sephirotDescriptions[secondSephira] || "Pas de description.";
-  const thirdDescription = sephirotDescriptions[thirdSephira] || "Pas de description.";
 
+  // 🔐 Sécurisation des données du localStorage
+  const jour = localStorage.getItem("jourFr") || "jour inconnu";
+  const date = localStorage.getItem("hebrewDate") || "date inconnue";
+
+  // 📎 Lien vers la fiche PDF
+  const pdfLink = `https://vroumr.github.io/kabal_frontend/pdfs/${bestSephira.toLowerCase()}.pdf`;
+
+  // 🎯 Affichage résultat
   const resultSection = document.getElementById("result-section");
-const pdfLink = `https://vroumr.github.io/kabal_frontend/pdfs/${bestSephira.toLowerCase()}.pdf`; // en minuscules
+  resultSection.classList.remove("hidden");
+  resultSection.innerHTML = `
+    <h2>🕯️ Tu es né(e) un ${jour}, soit le ${date}</h2>
+    <h2>✨ Ta Séphira dominante : ${bestSephira}</h2>
+    <p>${bestDescription}</p>
+    <a href="${pdfLink}" target="_blank" download class="pdf-download">📥 Télécharger la fiche ${bestSephira}</a>
+    <h2>🌟 Ta Séphira secondaire : ${secondSephira}</h2>
+    <p>${secondDescription}</p>
+    <button onclick="location.reload()">🔄 Recommencer</button>
+  `;
+}
 
-resultSection.innerHTML = `
-  <h2>🕯️ Tu es né(e) un ${localStorage.getItem("jourFr")}, soit le ${localStorage.getItem("hebrewDate")}</h2>
-  <h2>✨ Ta Séphira dominante : ${bestSephira}</h2>
-  <p>${bestDescription}</p>
-  <a href="${pdfLink}" target="_blank" download class="pdf-download">📥 Télécharger la fiche ${bestSephira}</a>
-  <h2>🌟 Ta Séphira secondaire : ${secondSephira}</h2>
-  <p>${secondDescription}</p>
-  <button onclick="location.reload()">🔄 Recommencer</button>
-`;
-} // 👈 fin de la fonction analyzeResult
+
 
 window.addEventListener("DOMContentLoaded", () => {
   buildQuiz(); // ✅ Construit le quiz après que la page soit chargée
