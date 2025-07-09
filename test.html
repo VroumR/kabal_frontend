@@ -792,6 +792,9 @@ function analyzeResult() {
   const secondDescription = sephirotDescriptions[secondSephira] || "Pas de description.";
 
   const resultSection = document.getElementById("result-section");
+  const jourFr = localStorage.getItem("jourFr");
+const hebrewDate = localStorage.getItem("hebrewDate");
+
   resultSection.innerHTML = `
     <h2>✨ Ta Séphira dominante : ${bestSephira}</h2>
     <p>${bestDescription}</p>
