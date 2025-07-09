@@ -778,10 +778,11 @@ container.innerHTML = ""; // ✅ empêche la duplication si appelé plusieurs fo
 
     container.appendChild(questionDiv);
   });
-}
+
 document.querySelectorAll('input[type="radio"]').forEach(input => {
     input.addEventListener("change", updateProgress);
   });
+    } 
 
 
  
