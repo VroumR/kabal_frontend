@@ -133,7 +133,8 @@ document.getElementById("startBtn").addEventListener("click", () => {
     }
 
     const gdate = new Date(date);
-    const hDate = new Hebcal.HDate(gdate, Hebcal.greg()); // ✅ date grégorienne précisée
+  const hDate = new Hebcal.HDate(gdate);
+
     const moisHebrew = hDate.month;
     const heureNum = parseInt(hour.split(":")[0], 10);
 
